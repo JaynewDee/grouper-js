@@ -1,0 +1,23 @@
+{
+  "name": "group-maker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4",
+    "commander": "^9.4.1",
+    "conf": "^10.2.0",
+    "dotenv": "^16.0.3",
+    "jsonbase.com": "^1.0.3",
+    "mysql2": "^2.3.3"
+  },
+  "bin": {
+    "grouper": "./index.js"
+  }
+}
