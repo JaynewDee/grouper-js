@@ -1,6 +1,6 @@
 const { Command } = require("commander");
 const { listPassing, addStudent } = require("../actions/index");
-
+const {} = require("dotenv/config");
 const program = new Command();
 console.log(program);
 const Program = (commandStr, descriptionStr, actionFunction) =>
