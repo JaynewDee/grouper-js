@@ -1,8 +1,19 @@
+/**
+ * Program configuration module.
+ * @module program
+ */
 const { Command } = require("commander");
 const { listPassing, addStudent } = require("../actions/index");
-const {} = require("dotenv/config");
+
 const program = new Command();
-console.log(program);
+
+/**
+ * Program factory attaches essential config to each command
+ * @param {String} commandStr
+ * @param {String} descriptionStr
+ * @param {Function} actionFunction
+ * @returns {Command}
+ */
 const Program = (commandStr, descriptionStr, actionFunction) =>
   program
     .command(commandStr)
@@ -10,6 +21,7 @@ const Program = (commandStr, descriptionStr, actionFunction) =>
     .action(actionFunction);
 
 Program("list-passing", "List students by pass or fail", listPassing);
-Program("add", "Add Student", addStudent);
+Program("add <student_name>", "Manually add a single student", addStudent);
+Program("import <filename>", "Import file", handleImport);
 
 module.exports = program;
