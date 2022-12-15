@@ -1,4 +1,4 @@
-import Student from "../data/index.js";
+import { Student } from "../lib/index.js";
 
 export const addStudent = (studentList) => (setter) => (student) =>
   studentList

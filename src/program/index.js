@@ -3,8 +3,9 @@
  * @module program
  */
 import { Command } from "commander";
-import ACTIONS from "../actions/index.js";
 import { Decor } from "../lib/decor.js";
+import ACTIONS from "../actions/index.js";
+
 const { listPassing, addStudent, handleImport } = ACTIONS;
 
 const program = new Command()
@@ -23,7 +24,7 @@ const Program = (cmdStr, descrStr, actionFn) =>
   program.command(cmdStr).description(descrStr).action(actionFn);
 
 Program("list-passing", "List students by pass or fail", listPassing);
-Program("add <student_name>", "Manually add a single student", addStudent);
+Program("add student", "Manually add a single student", addStudent);
 Program("import <file_path>", "Import file", handleImport);
 
 export default program;

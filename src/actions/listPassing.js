@@ -1,5 +1,8 @@
-import chalk from "chalk";
-const { red, green, yellow } = chalk;
+/**
+ *
+ * @param {Object[]} studentList
+ * @returns
+ */
 export const listPassing = (studentList) => () =>
   studentList && studentList.length
     ? studentList.reduce((student) =>

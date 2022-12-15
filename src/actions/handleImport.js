@@ -2,11 +2,12 @@
  * Import and parse input file
  * @module actions/handleImport
  */
-import fs from "fs";
+import { FileHandler } from "../lib/fs.js";
+
 const { log } = console;
+
 const matchExt = new RegExp(/\.\w{1,4}/);
 
-const readJson = (absPath) => fs.readFileSync(absPath);
 const getAbsolutePath = (input) => `${process.cwd()}\\${input}`;
 
 /**

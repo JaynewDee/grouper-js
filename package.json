@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "install": "npm install && cd src && npm install",
+    "install": "cd src && npm install",
+    "build": "babel src -d lib",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,10 +18,5 @@
   "bugs": {
     "url": "https://github.com/JaynewDee/grouper-js/issues"
   },
-  "homepage": "https://github.com/JaynewDee/grouper-js#readme",
-  "devDependencies": {
-    "@babel/cli": "^7.19.3",
-    "@babel/core": "^7.20.5",
-    "@babel/preset-env": "^7.20.2"
-  }
+  "homepage": "https://github.com/JaynewDee/grouper-js#readme"
 }
