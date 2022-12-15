@@ -1,6 +1,6 @@
-const { red, green, yellow } = require("chalk");
-
-const listPassing = (studentList) => () =>
+import chalk from "chalk";
+const { red, green, yellow } = chalk;
+export const listPassing = (studentList) => () =>
   studentList && studentList.length
     ? studentList.reduce((student) =>
         student.passing
@@ -8,5 +8,3 @@ const listPassing = (studentList) => () =>
           : console.log(red.bold(`${student.name} is failing`))
       )
     : console.log(yellow(`No students found ...`));
-
-module.exports = listPassing;

@@ -2,22 +2,25 @@
   "name": "group-maker",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
+    "install": "npm install && cd src && npm install",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JaynewDee/grouper-js.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "chalk": "^4",
-    "commander": "^9.4.1",
-    "conf": "^10.2.0",
-    "dotenv": "^16.0.3",
-    "jsonbase.com": "^1.0.3",
-    "mysql2": "^2.3.3"
+  "bugs": {
+    "url": "https://github.com/JaynewDee/grouper-js/issues"
   },
-  "bin": {
-    "grouper": "./main.js"
+  "homepage": "https://github.com/JaynewDee/grouper-js#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.5",
+    "@babel/preset-env": "^7.20.2"
   }
 }

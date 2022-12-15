@@ -1,0 +1,24 @@
+{
+  "name": "group-maker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d lib"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4",
+    "commander": "^9.4.1",
+    "csvtojson": "^2.0.10",
+    "dotenv": "^16.0.3",
+    "figures": "^5.0.0"
+  },
+  "bin": {
+    "grouper": "./main.js"
+  }
+}
