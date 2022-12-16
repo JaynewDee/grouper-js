@@ -2,7 +2,7 @@
 
 "use strict";
 
-import program from "./program/index.js";
+import program from "./program/grouper.js";
 import {} from "dotenv/config";
 
 program.parse();

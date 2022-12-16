@@ -5,7 +5,7 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "keywords": [],
   "author": "",
@@ -16,9 +16,16 @@
     "csvtojson": "^2.0.10",
     "dotenv": "^16.0.3",
     "figures": "^5.0.0",
+    "inquirer": "^9.1.4",
     "nanoid": "^4.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "bin": {
     "grouper": "./main.js"
+  },
+  "devDependencies": {
+    "jest": "^29.3.1"
   }
 }

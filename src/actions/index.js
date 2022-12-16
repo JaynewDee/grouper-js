@@ -4,11 +4,11 @@
  */
 
 import { addStudent } from "./addStudent.js";
+import { importHandler } from "./import.js";
 import { listPassing } from "./listPassing.js";
-import { handleImport } from "./handleImport.js";
+import { FileHandler } from "../lib/fs.js";
 
-export default {
-  listPassing: listPassing(),
-  addStudent: addStudent()(),
-  handleImport
-};
+const handleAddStudent = addStudent(FileHandler);
+const handleImport = importHandler(FileHandler);
+
+export { handleAddStudent, handleImport, listPassing };

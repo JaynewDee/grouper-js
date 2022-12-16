@@ -1,8 +1,9 @@
 import { nanoid } from "nanoid";
 
-export const Student = (name, avg) => ({
+export const Student = (name, avg, group = -1) => ({
   id: nanoid(),
   name,
   avg,
-  added: new Date().toLocaleDateString()
+  group,
+  added: new Date()
 });
