@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "install": "cd src && npm install",
-    "build": "babel src -d lib",
+    "build": "echo \"Error: missing build script\" && exit 1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/JaynewDee/grouper-js/issues"
   },
-  "homepage": "https://github.com/JaynewDee/grouper-js#readme"
+  "homepage": "https://github.com/JaynewDee/grouper-js#readme",
+  "devDependencies": {
+    "eslint": "^8.29.0"
+  }
 }

@@ -1,16 +1,42 @@
+/**
+ * @module lib
+ */
+
 import fs from "fs";
 import os from "os";
 import csv from "csvtojson";
 import { pipe } from "./func.js";
 import { writeFile } from "node:fs/promises";
 
+const matchers = Object.freeze({
+  name: new RegExp(/name|studentname/i),
+  avg: new RegExp(/avg|average|gpa/i),
+  group: new RegExp(/group|team|/i)
+});
+
+const getFields = (studentsArr) =>
+  studentsArr.map((studentObj) =>
+    Object.entries(studentObj).reduce(
+      (acc, [key, val]) =>
+        key.match(matchers.name)
+          ? { ...acc, name: val }
+          : key.match(matchers.avg)
+          ? { ...acc, avg: parseInt(val) }
+          : key.match(matchers.group)
+          ? { ...acc, group: val }
+          : acc,
+      {}
+    )
+  );
 const getAbsolutePath = (input) => `${process.cwd()}\\${input}`;
 
-const readJson = (path) => fs.readFileSync(path);
-const readFlowJson = pipe(readJson);
+const readFlowJson = (path) => fs.readFileSync(path);
 
-const csvToJson = async (absPath) => await csv().fromFile(absPath);
-const toJsonFlow = pipe(csvToJson);
+const csvToJson = async (absPath) =>
+  await csv()
+    .fromFile(absPath)
+    .then((jsonArr) => getFields(jsonArr));
+const convertCsvToJson = pipe(csvToJson);
 
 const initStorage = async (pathToTemp) =>
   await writeFile(pathToTemp, JSON.stringify([]));
@@ -29,8 +55,20 @@ const convertJsonToCsv = (jsonArr) => (headers) =>
 
 /**
  *
- * @param {string} source User input
- * @returns {Object}
+ * @constructor
+ * @typedef {FileHandler}
+ * @type {object}
+ * @param {object} source
+ * @property {object} source user input
+ * @property {string} ext extension of source file
+ * @property {string} absolute full path to input file
+ * @property {string} tempDir user's os-determined tempfile directory
+ * @property {string} tempDefault default name of saved temp file
+ * @property {Function} readFlowJson pipe file into readable json
+ * @property {Function} convertCsvToJson convert csv to json
+ * @property {Function} initStorage create temp file if not exists
+ * @property {Function} writeToTemp write data to temp file
+ * @property {Function} convertJsonToCsv covert json to csv
  */
 export const FileHandler = (source = {}) => ({
   source,
@@ -41,7 +79,7 @@ export const FileHandler = (source = {}) => ({
   tempDir: os.tmpdir(),
   tempDefault: `\\grouper-students.json`,
   readFlowJson,
-  toJsonFlow,
+  convertCsvToJson,
   initStorage,
   writeToTemp,
   convertJsonToCsv
