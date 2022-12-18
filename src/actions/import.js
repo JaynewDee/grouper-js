@@ -1,15 +1,14 @@
 /**
  * Import and parse input file
- * @module actions/import
+ * @module actions
  */
 
 import { Student } from "../lib/models.js";
 
 /**
- * @param {fileHandler} FileHandler
+ * @param {Function} fileHandler
  * @param {string} input User-specified filepath.
  * @param {object} options
- * @returns {void}
  */
 
 export const importHandler = (fileHandler) => async (input, options) => {
@@ -22,7 +21,7 @@ export const importHandler = (fileHandler) => async (input, options) => {
     convertCsvToJson,
     writeToTemp
   } = fileHandler(input);
-
+  console.log(input);
   const temp = tempDir + tempDefault;
 
   if (ext === ".csv") {

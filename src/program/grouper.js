@@ -4,17 +4,17 @@
  */
 import { Argument, Command } from "commander";
 import { TitleDecor } from "../lib/decor.js";
-import { compose, pipe } from "../lib/func.js";
+import { pipe } from "../lib/func.js";
 import {
   handleColorCode,
   handleAddStudent,
   handleImport,
-  handleExport
+  handleExport,
+  handleClearMemory
 } from "../actions/index.js";
 
 const PROGRAM_NAME = "GROUPER";
 
-// Initialize
 const program = new Command()
   .name(PROGRAM_NAME.toLowerCase())
   .version("1.0.0")
@@ -51,13 +51,13 @@ const Arguments = (args) => (program) =>
     : program;
 
 /**
- * @type {Function}
+ *
  * @param {string} cmdStr
  * @param {string} descrStr
- * @param {Function} actionFn
- * @param {string[]} options
- * @param {string[]} args
- * @returns {Command}
+ * @param {*} actionFn
+ * @param {Option[]} options
+ * @param {Argument[]} args
+ * @returns
  */
 const Cmnd =
   (cmdStr, descrStr, actionFn, options = [], args = []) =>
@@ -68,11 +68,39 @@ const Cmnd =
       Arguments(args)
     );
 
-Cmnd("color-list", "List students by pass or fail", handleColorCode)(program);
-Cmnd("add-student", "Manually add a single student", handleAddStudent)(program);
-Cmnd("import", "Import file", handleImport, [], [`<file_path>`])(program);
-Cmnd("export", "Export current class collections", handleExport, [
-  `"-ft|--ftype", "Set type of exported file"`
-])(program);
+const ColorCodedData = Cmnd(
+  "color-list",
+  "List students by pass or fail",
+  handleColorCode
+);
+const AddStudentManual = Cmnd(
+  "add-student",
+  "Manually add a single student",
+  handleAddStudent
+);
+const ImportLocalFile = Cmnd(
+  "import",
+  "Import file",
+  handleImport,
+  [],
+  [`<file_path>`]
+);
+const ExportCollections = Cmnd(
+  "export",
+  "Export current class collections",
+  handleExport,
+  [`"-ft|--ftype", "Set type of exported file"`]
+);
+const ClearCollections = Cmnd(
+  "clear",
+  "Clear current group data from local memory",
+  handleClearMemory
+);
+
+ColorCodedData(program);
+AddStudentManual(program);
+ImportLocalFile(program);
+ExportCollections(program);
+ClearCollections(program);
 
 export default program;

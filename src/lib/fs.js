@@ -8,7 +8,7 @@ import csv from "csvtojson";
 import { pipe } from "./func.js";
 import { writeFile } from "node:fs/promises";
 
-const matchers = Object.freeze({
+const { name, avg, group } = Object.freeze({
   name: new RegExp(/name|studentname/i),
   avg: new RegExp(/avg|average|gpa/i),
   group: new RegExp(/group|team|/i)
@@ -18,25 +18,25 @@ const getFields = (studentsArr) =>
   studentsArr.map((studentObj) =>
     Object.entries(studentObj).reduce(
       (acc, [key, val]) =>
-        key.match(matchers.name)
+        key.match(name)
           ? { ...acc, name: val }
-          : key.match(matchers.avg)
+          : key.match(avg)
           ? { ...acc, avg: parseInt(val) }
-          : key.match(matchers.group)
+          : key.match(group)
           ? { ...acc, group: val }
           : acc,
       {}
     )
   );
+
 const getAbsolutePath = (input) => `${process.cwd()}\\${input}`;
 
 const readFlowJson = (path) => fs.readFileSync(path);
 
-const csvToJson = async (absPath) =>
+const convertCsvToJson = async (absPath) =>
   await csv()
     .fromFile(absPath)
     .then((jsonArr) => getFields(jsonArr));
-const convertCsvToJson = pipe(csvToJson);
 
 const initStorage = async (pathToTemp) =>
   await writeFile(pathToTemp, JSON.stringify([]));
@@ -52,6 +52,8 @@ const convertJsonToCsv = (jsonArr) => (headers) =>
       headers.map((field) => JSON.stringify(row[field], replacer)).join(",")
     )
   ].join("\r\n");
+
+const clearStorage = (storagePath) => writeToTemp(storagePath, []);
 
 /**
  *
@@ -82,5 +84,6 @@ export const FileHandler = (source = {}) => ({
   convertCsvToJson,
   initStorage,
   writeToTemp,
-  convertJsonToCsv
+  convertJsonToCsv,
+  clearStorage
 });

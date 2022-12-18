@@ -37,4 +37,18 @@ const fileConflict = [
   }
 ];
 
-export { addStudent, fileConflict };
+const confirmClear = [
+  {
+    type: "confirm",
+    name: "confirmClear",
+    message: "Are you sure you want to clear all local group data?"
+  },
+  {
+    type: "confirm",
+    name: "confirmClearAgain",
+    message: "You'll lose everything ... Continue?",
+    when: (ans) => ans.confirmClear
+  }
+];
+
+export { addStudent, fileConflict, confirmClear };

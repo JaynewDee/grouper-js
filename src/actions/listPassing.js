@@ -1,27 +1,49 @@
 /**
- *
+ * @module actions/colorCode
+ */
+
+/**
  * @param {Object[]} studentList json array read from file
- * @returns
  */
 import { Rb, G, B, Y } from "../lib/decor.js";
 
+const getLetter = (avg) =>
+  avg <= 100 && avg >= 90
+    ? "A"
+    : avg <= 89 && avg >= 80
+    ? "B"
+    : avg <= 79 && avg >= 70
+    ? "C"
+    : "F";
+
 const evaluatePassing = (studentList) =>
   studentList && studentList.length
-    ? studentList.map(({ name, colorCode }) =>
-        colorCode === "green"
+    ? studentList.map(({ name, avg }) =>
+        getLetter(avg) === "A"
           ? console.log(G(`${name}`))
-          : colorCode === "blue"
+          : getLetter(avg) === "B"
           ? console.log(B(name))
-          : colorCode === "yellow"
+          : getLetter(avg) === "C"
           ? console.log(Y(name))
-          : colorCode === "red"
-          ? console.log(Rb(name))
-          : console.log(name)
+          : console.log(Rb(name))
       )
-    : console.log(yellow(`No students found ...`));
+    : console.log(
+        Rb(`No students found ... \nImport a file or manually add students`)
+      );
 
 export const listPassing = (fileHandler) => async (input, options) => {
   const { tempDir, tempDefault, readFlowJson } = fileHandler();
   const students = await JSON.parse(readFlowJson(tempDir + tempDefault));
   evaluatePassing(students);
 };
+
+/* 
+        Columns -    green     blue     yellow     red
+
+        const table = {
+          green: [],
+          blue: [],
+          yellow: [],
+          red: []
+        }
+*/
