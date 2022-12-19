@@ -16,7 +16,7 @@ const getLetter = (avg) =>
     ? "C"
     : "F";
 
-const evaluatePassing = (studentList) =>
+const logColors = (studentList) =>
   studentList && studentList.length
     ? studentList.map(({ name, avg }) =>
         getLetter(avg) === "A"
@@ -34,7 +34,7 @@ const evaluatePassing = (studentList) =>
 export const listPassing = (fileHandler) => async (input, options) => {
   const { tempDir, tempDefault, readFlowJson } = fileHandler();
   const students = await JSON.parse(readFlowJson(tempDir + tempDefault));
-  evaluatePassing(students);
+  logColors(students);
 };
 
 /* 

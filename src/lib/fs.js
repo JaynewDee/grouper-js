@@ -5,7 +5,7 @@
 import fs from "fs";
 import os from "os";
 import csv from "csvtojson";
-import { pipe } from "./func.js";
+import { parse } from "json2csv";
 import { writeFile } from "node:fs/promises";
 
 const { name, avg, group } = Object.freeze({
@@ -44,17 +44,11 @@ const initStorage = async (pathToTemp) =>
 const writeToTemp = async (pathToTemp, data) =>
   await writeFile(pathToTemp, JSON.stringify(data));
 
-const replacer = (key, value) => (value === null ? "" : value);
-const convertJsonToCsv = (jsonArr) => (headers) =>
-  [
-    headers.join(","),
-    ...jsonArr.map((row) =>
-      headers.map((field) => JSON.stringify(row[field], replacer)).join(",")
-    )
-  ].join("\r\n");
-
 const clearStorage = (storagePath) => writeToTemp(storagePath, []);
 
+const convertJsonToCsv = (jsonData) => parse(jsonData);
+const exportAsCsv = async (filename, csvdata) =>
+  await writeFile(filename, csvdata);
 /**
  *
  * @constructor
@@ -84,6 +78,7 @@ export const FileHandler = (source = {}) => ({
   convertCsvToJson,
   initStorage,
   writeToTemp,
+  clearStorage,
   convertJsonToCsv,
-  clearStorage
+  exportAsCsv
 });

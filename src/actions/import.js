@@ -21,7 +21,7 @@ export const importHandler = (fileHandler) => async (input, options) => {
     convertCsvToJson,
     writeToTemp
   } = fileHandler(input);
-  console.log(input);
+
   const temp = tempDir + tempDefault;
 
   if (ext === ".csv") {
