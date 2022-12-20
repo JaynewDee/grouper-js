@@ -2,7 +2,7 @@
   "name": "group-maker",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/main.js",
   "scripts": {
     "install": "cd src && npm install",
     "build": "echo \"Error: missing build script\" && exit 1",

@@ -49,6 +49,7 @@ const clearStorage = (storagePath) => writeToTemp(storagePath, []);
 const convertJsonToCsv = (jsonData) => parse(jsonData);
 const exportAsCsv = async (filename, csvdata) =>
   await writeFile(filename, csvdata);
+
 /**
  *
  * @constructor

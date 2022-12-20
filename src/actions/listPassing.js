@@ -36,14 +36,3 @@ export const listPassing = (fileHandler) => async (input, options) => {
   const students = await JSON.parse(readFlowJson(tempDir + tempDefault));
   logColors(students);
 };
-
-/* 
-        Columns -    green     blue     yellow     red
-
-        const table = {
-          green: [],
-          blue: [],
-          yellow: [],
-          red: []
-        }
-*/
