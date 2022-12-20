@@ -11,16 +11,8 @@ import { exportHandler } from "./export.js";
 import { listPassing } from "./listPassing.js";
 import { clearData } from "./clearData.js";
 
-const handleAddStudent = addStudent(FileHandler);
-const handleImport = importHandler(FileHandler);
-const handleExport = exportHandler(FileHandler);
-const handleColorCode = listPassing(FileHandler);
-const handleClearMemory = clearData(FileHandler);
-
-export {
-  handleAddStudent,
-  handleImport,
-  handleExport,
-  handleColorCode,
-  handleClearMemory
-};
+export const handleAddStudent = addStudent(FileHandler);
+export const handleImport = importHandler(FileHandler);
+export const handleExport = exportHandler(FileHandler);
+export const handleColorCode = listPassing(FileHandler);
+export const handleClearMemory = clearData(FileHandler);
