@@ -2,16 +2,16 @@
  * @module lib
  */
 
-import fs from 'fs';
-import os from 'os';
-import csv from 'csvtojson';
-import { parse } from 'json2csv';
-import { writeFile } from 'node:fs/promises';
+import fs from "fs";
+import os from "os";
+import csv from "csvtojson";
+import { parse } from "json2csv";
+import { writeFile } from "node:fs/promises";
 
 const { name, avg, group } = Object.freeze({
   name: new RegExp(/name|studentname/i),
   avg: new RegExp(/avg|average|gpa/i),
-  group: new RegExp(/group|team|/i),
+  group: new RegExp(/group|team|/i)
 });
 
 const getFields = (studentsArr) =>
@@ -71,7 +71,7 @@ export const FileHandler = (source = {}) => ({
   source,
   ext: Object.keys(source).length
     ? source.match(new RegExp(/\.(csv|json)/))[0]
-    : '',
+    : "",
   absolute: getAbsolutePath(source),
   tempDir: os.tmpdir(),
   tempDefault: `/grouper-students.json`,
@@ -81,5 +81,5 @@ export const FileHandler = (source = {}) => ({
   writeToTemp,
   clearStorage,
   convertJsonToCsv,
-  exportAsCsv,
+  exportAsCsv
 });
