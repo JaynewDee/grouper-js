@@ -41,12 +41,18 @@ const convertCsvToJson = async (absPath) =>
 const initStorage = async (pathToTemp) =>
   await writeFile(pathToTemp, JSON.stringify([]));
 
-const writeToTemp = async (pathToTemp, data) =>
+const writeToTemp = async (pathToTemp, data) => {
   await writeFile(pathToTemp, JSON.stringify(data));
+  console.log('Access the CSV file at: ' + pathToTemp);
+};
 
 const clearStorage = (storagePath) => writeToTemp(storagePath, []);
 
 const convertJsonToCsv = (jsonData) => parse(jsonData);
+
+const convertGroupsJsonToCsv = (jsonData) =>
+  parse(jsonData, { fields: ['name', 'avg', 'group'] });
+
 const exportAsCsv = async (filename, csvdata) =>
   await writeFile(filename, csvdata);
 
@@ -81,5 +87,6 @@ export const FileHandler = (source = {}) => ({
   writeToTemp,
   clearStorage,
   convertJsonToCsv,
+  convertGroupsJsonToCsv,
   exportAsCsv,
 });

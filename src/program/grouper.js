@@ -39,12 +39,16 @@ program
   .command('export')
   .description('Export current class collections')
   .action(handleExport)
-  .option('-ft|--filetype <type>', 'Type of export file | default: csv', 'csv');
+  .option('-ft|--filetype <type>', 'Type of export file | default: csv', 'csv')
+  .option(
+    '-ct|--collection-type <type>',
+    'Type of collection to export | default: students',
+    'students'
+  );
 
 program
-  .command('create-groups')
-  .description('Create groups with a given group size')
-  .action(handleCreateGroups)
-  .option('-gs|--group-size <size>', 'Size of each group | default: 6', '6');
+  .command('create-groups <num-groups>')
+  .description('Create a given number of groups')
+  .action(handleCreateGroups);
 
 export default program;

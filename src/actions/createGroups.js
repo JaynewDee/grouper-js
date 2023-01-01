@@ -1,7 +1,5 @@
 // This file contains the logic for creating groups based on student averages
-// need to change group to Project Group
-// need to figure out commander or inquirer prompts and how we want CSVs to be formatted
-// need to figure out how to use BCS Grades CSVs
+
 const getRandomIdx = (objSize) => Math.floor(Math.random() * objSize);
 
 const handleUnassignedStudents = (
@@ -105,7 +103,7 @@ const sortByAverages = (records, numGroups) => {
 export const createGroupsHandler = (fileHandler) => async (input, options) => {
   const { readFlowJson, tempDir, tempDefault, writeToTemp } = fileHandler();
   const students = await readFlowJson(tempDir + tempDefault);
-  const groups = sortByAverages(students, Number(input.groupSize));
-  Object.values(groups).forEach((g) => console.table(g));
+  const groups = sortByAverages(students, parseInt(input));
   await writeToTemp(tempDir + '/groups.json', groups);
+  Object.values(groups).forEach((g) => console.table(g));
 };
