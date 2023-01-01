@@ -50,6 +50,8 @@ const convertJsonToCsv = (jsonData) => parse(jsonData);
 const exportAsCsv = async (filename, csvdata) =>
   await writeFile(filename, csvdata);
 
+const getOsPathType = () => (os.tmpdir().includes("/") ? "/" : "\\");
+
 /**
  *
  * @constructor
@@ -74,7 +76,7 @@ export const FileHandler = (source = {}) => ({
     : "",
   absolute: getAbsolutePath(source),
   tempDir: os.tmpdir(),
-  tempDefault: `/grouper-students.json`,
+  tempDefault: `${getOsPathType()}grouper-students.json`,
   readFlowJson,
   convertCsvToJson,
   initStorage,

@@ -3,7 +3,7 @@
  * @module actions
  */
 
-import { Student } from '../lib/models.js';
+import { Student } from "../lib/models.js";
 
 /**
  * @param {Function} fileHandler
@@ -19,12 +19,12 @@ export const importHandler = (fileHandler) => async (input, options) => {
     tempDefault,
     readFlowJson,
     convertCsvToJson,
-    writeToTemp,
+    writeToTemp
   } = fileHandler(input);
 
   const temp = tempDir + tempDefault;
 
-  if (ext === '.csv') {
+  if (ext === ".csv") {
     const jsonArray = await convertCsvToJson(absolute);
     const students = jsonArray.map((student) =>
       Student(student.name, student.avg, student.group)
@@ -35,7 +35,7 @@ export const importHandler = (fileHandler) => async (input, options) => {
       `The above data was successfully written to ${tempDefault} @ ${tempDir}`
     );
   }
-  if (ext === '.json') {
+  if (ext === ".json") {
     const jsonArray = readFlowJson(absolute);
     writeToTemp(temp, jsonArray);
   }

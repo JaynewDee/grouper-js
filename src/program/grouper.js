@@ -21,31 +21,31 @@ const program = new Command()
   .version("1.0.0")
   .description(TitleDecor(PROGRAM_NAME));
 
-program
-  .command("add-student")
-  .description("Manually add a single student")
-  .action(handleAddStudent);
+const Cmnd = (cmndName, description, action) => (program) =>
+  program.command(cmndName).description(description).action(action);
 
-program
-  .command("color-list")
-  .description("List students and color code by gpa")
-  .action(handleColorCode);
+const [AddStudent, ColorCode, ImportLocal, ExportCollections, CreateGroups] = [
+  Cmnd("add-student", "Manually add a single student", handleAddStudent),
+  Cmnd("color-code", "List students and color code by gpa", handleColorCode),
+  Cmnd("import <file-path>", "Import local file", handleImport),
+  Cmnd("export", "Export current class collections", handleExport),
+  Cmnd(
+    "create-groups",
+    "Create groups with a given group size",
+    handleCreateGroups
+  )
+].map((fn) => fn(program));
 
-program
-  .command("import <file-path>")
-  .description("Import local file")
-  .action(handleImport);
+ExportCollections.option(
+  "-ft|--filetype <type>",
+  "Type of export file | default: csv",
+  "csv"
+);
 
-program
-  .command("export")
-  .description("Export current class collections")
-  .action(handleExport)
-  .option("-ft|--filetype <type>", "Type of export file | default: csv", "csv");
-
-program
-  .command("create-groups")
-  .description("Create groups with a given group size")
-  .action(handleCreateGroups)
-  .option("-gs|--group-size <size>", "Size of each group | default: 6", "6");
+CreateGroups.option(
+  "-gs|--group-size <size>",
+  "Size of each group | default: 6",
+  "6"
+);
 
 export default program;
