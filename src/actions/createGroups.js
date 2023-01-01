@@ -102,6 +102,7 @@ const sortByAverages = (records, numGroups) => {
 
 export const createGroupsHandler = (fileHandler) => async (input, options) => {
   const { readFlowJson, tempDir, tempDefault, writeToTemp } = fileHandler();
+  if (!input) throw new Error('Please provide a number of groups to create');
   const students = await readFlowJson(tempDir + tempDefault);
   const groups = sortByAverages(students, parseInt(input));
   await writeToTemp(tempDir + '/groups.json', groups);
