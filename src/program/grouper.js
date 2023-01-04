@@ -31,14 +31,14 @@ const [AddStudent, ColorCode, ImportLocal, ExportCollections, CreateGroups] = [
   Cmnd("import <file-path>", "Import local file", handleImport),
   Cmnd("export", "Export current class collections", handleExport),
   Cmnd(
-    "create-groups",
-    "Create groups with a given group size",
+    "create-groups <num-groups>",
+    "Create a given number of groups",
     handleCreateGroups
   )
 ].map((fn) => fn(program));
 
 ExportCollections.option(
-  "-ft|--filetype <type>",
+  "-ft|--file-type <type>",
   "Type of export file | default: csv",
   "csv"
 ).option(
@@ -46,30 +46,5 @@ ExportCollections.option(
   "Type of collection to export | default: students",
   "students"
 );
-
-CreateGroups.option(
-  "-gs|--group-size <size>",
-  "Size of each group | default: 6",
-  "6"
-);
-
-/* 
-program
-  .command('export')
-  .description('Export current class collections')
-  .action(handleExport)
-  .option('-ft|--filetype <type>', 'Type of export file | default: csv', 'csv')
-  .option(
-    '-ct|--collection-type <type>',
-    'Type of collection to export | default: students',
-    'students'
-  );
-
-program
-  .command('create-groups <num-groups>')
-  .description('Create a given number of groups')
-  .action(handleCreateGroups);
-  
-*/
 
 export default program;

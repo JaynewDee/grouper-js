@@ -7,7 +7,7 @@ import os from "os";
 import csv from "csvtojson";
 import { parse } from "json2csv";
 import { writeFile } from "node:fs/promises";
-
+import { Y } from "./decor.js";
 const { name, avg, group } = Object.freeze({
   name: new RegExp(/name|studentname/i),
   avg: new RegExp(/avg|average|gpa/i),
@@ -29,6 +29,21 @@ const getFields = (studentsArr) =>
     )
   );
 
+const asyncTryCatch =
+  (fn) =>
+  async (...fnArgs) => {
+    try {
+      return await fn(...fnArgs);
+    } catch (err) {
+      console.warn(err);
+      console.log(
+        Y(`Something went wrong while handling your file.
+     Please verify that the relative path to the file is correct.`)
+      );
+      process.exit(1);
+    }
+  };
+
 const getAbsolutePath = (input) => `${process.cwd()}/${input}`;
 
 const readFlowJson = (path) => fs.readFileSync(path);
@@ -41,16 +56,20 @@ const convertCsvToJson = async (absPath) =>
 const initStorage = async (pathToTemp) =>
   await writeFile(pathToTemp, JSON.stringify([]));
 
-const writeToTemp = async (pathToTemp, data) =>
+const writeToTemp = async (pathToTemp, data) => {
   await writeFile(pathToTemp, JSON.stringify(data));
+  console.log("Access the CSV file at: " + pathToTemp);
+};
 
 const clearStorage = (storagePath) => writeToTemp(storagePath, []);
 
 const convertJsonToCsv = (jsonData) => parse(jsonData);
+
+const convertGroupsJsonToCsv = (jsonData) =>
+  parse(jsonData, { fields: ["name", "avg", "group"] });
+
 const exportAsCsv = async (filename, csvdata) =>
   await writeFile(filename, csvdata);
-
-const getOsPathType = () => (os.tmpdir().includes("/") ? "/" : "\\");
 
 /**
  *
@@ -76,12 +95,14 @@ export const FileHandler = (source = {}) => ({
     : "",
   absolute: getAbsolutePath(source),
   tempDir: os.tmpdir(),
-  tempDefault: `${getOsPathType()}grouper-students.json`,
+  tempDefault: `/grouper-students.json`,
   readFlowJson,
   convertCsvToJson,
   initStorage,
   writeToTemp,
   clearStorage,
   convertJsonToCsv,
-  exportAsCsv
+  convertGroupsJsonToCsv,
+  exportAsCsv,
+  asyncTryCatch
 });
