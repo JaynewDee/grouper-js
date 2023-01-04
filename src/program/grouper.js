@@ -24,7 +24,7 @@ const program = new Command()
 const Cmnd = (cmndName, description, action) => (program) =>
   program.command(cmndName).description(description).action(action);
 
-// Unused variables are simply commands without options attached
+// Unused without options, but still attached to program
 const [AddStudent, ColorCode, ImportLocal, ExportCollections, CreateGroups] = [
   Cmnd("add-student", "Manually add a single student", handleAddStudent),
   Cmnd("color-code", "List students and color code by gpa", handleColorCode),
