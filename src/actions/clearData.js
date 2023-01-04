@@ -24,7 +24,9 @@ export const clearData = (fileHandler) => async () => {
   };
 
   if (isAGo.confirmClearAgain) {
-    return clearSwitch(fileToClear);
+    clearSwitch(fileToClear);
+    console.log(`${fileToClear} collection emptied.`);
+    return;
   }
 
   console.warn(`Operation ABORTED.  Storage was not reset.`);
