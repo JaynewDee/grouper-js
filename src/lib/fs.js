@@ -7,7 +7,7 @@ import csv from "csvtojson";
 import { parse } from "json2csv";
 import { writeFile } from "node:fs/promises";
 import { pathResolver } from "./path.js";
-import { ErrorDecor } from "./decor.js";
+import { FileNotFound } from "./error.js";
 
 const { name, avg, group } = Object.freeze({
   name: new RegExp(/name|studentname/i),
@@ -36,12 +36,8 @@ const asyncTryCatch =
     try {
       return await fn(...fnArgs);
     } catch (err) {
-      console.warn(err);
-      console.log(
-        ErrorDecor(`
-        Something went wrong while handling your file.
-        Please verify that the path to the file is correct.`)
-      );
+      console.log(err.name);
+      FileNotFound();
       process.exit(1);
     }
   };
