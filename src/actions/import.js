@@ -11,7 +11,7 @@ import { Student } from "../lib/models.js";
  * @param {object} options
  */
 
-export const importHandler = (fileHandler) => async (input, options) => {
+export const importHandler = (fileHandler) => async (input) => {
   const {
     ext,
     absolute,

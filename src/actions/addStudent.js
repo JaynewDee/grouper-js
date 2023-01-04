@@ -6,7 +6,7 @@
 import { Student } from "../lib/models.js";
 import { addStudentPrompt } from "../ui/index.js";
 
-export const addStudent = (fileHandler) => async (input, options) => {
+export const addStudent = (fileHandler) => async () => {
   const { readFlowJson, tempDir, tempDefault, writeToTemp } = fileHandler();
   const path = tempDir + tempDefault;
   const { name, avg, groupNum } = await addStudentPrompt();

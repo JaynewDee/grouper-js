@@ -7,7 +7,7 @@
  * @param {Function} fileHandler
  */
 
-export const exportHandler = (fileHandler) => async (input, options) => {
+export const exportHandler = (fileHandler) => async (input) => {
   const { convertJsonToCsv, readFlowJson, tempDir, tempDefault, exportAsCsv } =
     fileHandler();
   const { filetype } = input;

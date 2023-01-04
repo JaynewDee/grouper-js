@@ -102,7 +102,7 @@ const sortByAverages = (records, numGroups) => {
   return createGroups(classMap, numGroups);
 };
 
-export const createGroupsHandler = (fileHandler) => async (input, options) => {
+export const createGroupsHandler = (fileHandler) => async (input) => {
   const { readFlowJson, tempDir, tempDefault, writeToTemp } = fileHandler();
   const students = await readFlowJson(tempDir + tempDefault);
   const groups = sortByAverages(students, Number(input.groupSize));
