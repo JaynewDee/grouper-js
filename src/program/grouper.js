@@ -27,7 +27,7 @@ const Cmnd = (cmndName, description, action) => (program) =>
 // Unused without options, but still attached to program
 const [AddStudent, ColorCode, ImportLocal, ExportCollections, CreateGroups] = [
   Cmnd("add-student", "Manually add a single student", handleAddStudent),
-  Cmnd("color-code", "List students and color code by gpa", handleColorCode),
+  Cmnd("color-list", "List students and color code by gpa", handleColorCode),
   Cmnd("import <file-path>", "Import local file", handleImport),
   Cmnd("export", "Export current class collections", handleExport),
   Cmnd(

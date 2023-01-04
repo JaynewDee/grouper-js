@@ -2,6 +2,7 @@
  * @module actions
  */
 import { confirmClearPrompt } from "../ui/index.js";
+
 export const clearData = (fileHandler) => async () => {
   const { clearStorage, tempDir, tempDefault } = fileHandler();
 
