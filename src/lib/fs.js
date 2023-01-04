@@ -7,7 +7,7 @@ import csv from "csvtojson";
 import { parse } from "json2csv";
 import { writeFile } from "node:fs/promises";
 import { pathResolver } from "./path.js";
-import { Y } from "./decor.js";
+import { ErrorDecor } from "./decor.js";
 
 const { name, avg, group } = Object.freeze({
   name: new RegExp(/name|studentname/i),
@@ -38,8 +38,9 @@ const asyncTryCatch =
     } catch (err) {
       console.warn(err);
       console.log(
-        Y(`Something went wrong while handling your file.
-     Please verify that the relative path to the file is correct.`)
+        ErrorDecor(`
+        Something went wrong while handling your file.
+        Please verify that the path to the file is correct.`)
       );
       process.exit(1);
     }
@@ -52,10 +53,8 @@ const convertCsvToJson = async (absPath) =>
     .fromFile(absPath)
     .then((jsonArr) => getFields(jsonArr));
 
-const writeToTemp = async (pathToTemp, data) => {
+const writeToTemp = async (pathToTemp, data) =>
   await writeFile(pathToTemp, JSON.stringify(data));
-  console.log("Access the CSV file at: " + pathToTemp);
-};
 
 const clearStorage = (storagePath) => writeToTemp(storagePath, []);
 

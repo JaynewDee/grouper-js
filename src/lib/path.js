@@ -10,7 +10,7 @@ import { sep } from "path";
  * @returns {object[...string]}
  */
 
-export const pathResolver = (input) => ({
+export const pathResolver = (input = "") => ({
   ext: Object.keys(input).length
     ? input.match(new RegExp(/\.(csv|json)/))[0]
     : "",

@@ -15,3 +15,6 @@ const gem = P(lozengeOutline);
 
 export const TitleDecor = (txt) =>
   `${gem + gem + gem + C(` ${txt} `) + gem + gem + gem}`;
+
+export const ErrorDecor = (errorTxt) =>
+  `${gem + Y(` ${errorTxt} `) + "\n" + gem}`;

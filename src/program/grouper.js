@@ -11,7 +11,8 @@ const [
   handleColorCode,
   handleImport,
   handleExport,
-  handleCreateGroups
+  handleCreateGroups,
+  handleClearData
 ] = handlers;
 
 const PROGRAM_NAME = "GROUPER";
@@ -33,7 +34,8 @@ const [AddStudent, ColorCode, ImportLocal, ExportCollections, CreateGroups] = [
     "create-groups <num-groups>",
     "Create a given number of groups",
     handleCreateGroups
-  )
+  ),
+  Cmnd("empty", "Clear specified filestore", handleClearData)
 ].map((fn) => fn(program));
 
 ExportCollections.option(
