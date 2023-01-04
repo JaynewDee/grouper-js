@@ -71,9 +71,12 @@ const exportAsCsv = async (filename, csvdata) =>
  * @param {object} paths
  * @property {Function} readFlowJson pipe file into readable json
  * @property {Function} convertCsvToJson convert csv to json
- * @property {Function} initStorage create temp file if not exists
+ * @property {Function} clearStorage empty user-specified collection
  * @property {Function} writeToTemp write data to temp file
  * @property {Function} convertJsonToCsv convert json to csv
+ * @property {Function} convertGroupsJsonToCsv
+ * @property {Function} exportAsCsv
+ * @property {Function} asyncTryCatch
  */
 export const FileHandler = (input = {}) => ({
   paths: pathResolver(input),
