@@ -17,10 +17,10 @@ export const exportHandler = (fileHandler) => async (input, options) => {
   } = fileHandler();
 
   const { studentsWritePath, groupsWritePath } = paths;
-  const { filetype, collectionType } = input;
+  const { fileType, collectionType } = input;
 
   if (collectionType === "students") {
-    if (filetype === "csv") {
+    if (fileType === "csv") {
       try {
         const tempData = JSON.parse(readFlowJson(studentsWritePath));
         const csv = convertJsonToCsv(tempData);

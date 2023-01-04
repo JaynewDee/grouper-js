@@ -3,8 +3,6 @@
  */
 
 import fs from "fs";
-import os from "os";
-import path from "path";
 import csv from "csvtojson";
 import { parse } from "json2csv";
 import { writeFile } from "node:fs/promises";
