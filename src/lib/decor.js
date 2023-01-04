@@ -17,4 +17,4 @@ export const TitleDecor = (txt) =>
   `${gem + gem + gem + C(` ${txt} `) + gem + gem + gem}`;
 
 export const ErrorDecor = (errorTxt) =>
-  `${gem + Y(` ${errorTxt} `) + "\n" + gem}`;
+  `${gem + gem + gem + Y(` ${errorTxt} `) + "\n" + gem + gem + gem}`;
