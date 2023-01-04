@@ -5,7 +5,7 @@
 import { Command } from "commander";
 import { TitleDecor } from "../lib/decor.js";
 
-import handlers from "../actions/index.js";
+import { handlers } from "../actions/index.js";
 const [
   handleAddStudent,
   handleColorCode,
@@ -24,6 +24,7 @@ const program = new Command()
 const Cmnd = (cmndName, description, action) => (program) =>
   program.command(cmndName).description(description).action(action);
 
+// Unused variables are simply commands without options attached
 const [AddStudent, ColorCode, ImportLocal, ExportCollections, CreateGroups] = [
   Cmnd("add-student", "Manually add a single student", handleAddStudent),
   Cmnd("color-code", "List students and color code by gpa", handleColorCode),

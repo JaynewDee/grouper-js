@@ -12,7 +12,7 @@ import { listPassing } from "./listPassing.js";
 import { clearData } from "./clearData.js";
 import { createGroupsHandler } from "./createGroups.js";
 
-const handlers = [
+export const handlers = [
   addStudent,
   listPassing,
   importHandler,
@@ -20,5 +20,3 @@ const handlers = [
   createGroupsHandler,
   clearData
 ].map((fn) => fn(FileHandler));
-
-export default handlers;
