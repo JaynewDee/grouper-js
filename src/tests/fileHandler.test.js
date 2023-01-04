@@ -7,17 +7,3 @@ describe("File system module factory", () => {
     expect(testInstance.source).toEqual({});
   });
 });
-
-/* 
-export const FileHandler = (source = {}) => ({
-  source,
-  ext: Object.entries(source).length
-    ? source.match(new RegExp(/\.(csv|json)/))[0]
-    : "",
-  absolute: getAbsolutePath(source),
-  tempDir: os.tmpdir(),
-  readFlow,
-  toJsonFlow,
-  initStorage: async (pathToTemp) =>
-    await mkdir(pathToTemp, { recursive: true })
-}); */

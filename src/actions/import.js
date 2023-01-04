@@ -12,32 +12,24 @@ import { Student } from "../lib/models.js";
  */
 
 export const importHandler = (fileHandler) => async (input) => {
-  const {
-    ext,
-    absolute,
-    tempDir,
-    tempDefault,
-    readFlowJson,
-    convertCsvToJson,
-    writeToTemp,
-    asyncTryCatch
-  } = fileHandler(input);
+  const { readFlowJson, convertCsvToJson, writeToTemp, asyncTryCatch, paths } =
+    fileHandler(input);
 
-  const temp = tempDir + tempDefault;
+  const { ext, localAbsolute, studentsWritePath } = paths;
 
   if (ext === ".csv") {
-    const jsonArray = await asyncTryCatch(convertCsvToJson)(absolute);
+    const jsonArray = await asyncTryCatch(convertCsvToJson)(localAbsolute);
     const students = jsonArray.map((student) =>
       Student(student.name, student.avg, student.group)
     );
-    writeToTemp(temp, students);
+    writeToTemp(studentsWritePath, students);
     console.table(jsonArray);
     console.log(
-      `The above data was successfully written to ${tempDefault} @ ${tempDir}`
+      `The above data was successfully written to ${studentsWritePath}`
     );
   }
   if (ext === ".json") {
-    const jsonArray = readFlowJson(absolute);
+    const jsonArray = readFlowJson(localAbsolute);
     writeToTemp(temp, jsonArray);
   }
 };

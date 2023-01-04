@@ -1,5 +1,4 @@
 // This file contains the logic for creating groups based on student averages
-
 const getRandomIdx = (objSize) => Math.floor(Math.random() * objSize);
 
 const handleUnassignedStudents = (
@@ -101,10 +100,11 @@ const sortByAverages = (records, numGroups) => {
 };
 
 export const createGroupsHandler = (fileHandler) => async (input) => {
-  const { readFlowJson, tempDir, tempDefault, writeToTemp } = fileHandler();
-  if (!input) throw new Error('Please provide a number of groups to create');
-  const students = await readFlowJson(tempDir + tempDefault);
+  const { readFlowJson, paths, writeToTemp } = fileHandler();
+  const { studentsWritePath, groupsWritePath } = paths;
+  if (!input) throw new Error("Please provide a number of groups to create");
+  const students = await readFlowJson(studentsWritePath);
   const groups = sortByAverages(students, parseInt(input));
-  await writeToTemp(tempDir + '/groups.json', groups);
   Object.values(groups).forEach((g) => console.table(g));
+  await writeToTemp(groupsWritePath, groups);
 };

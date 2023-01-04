@@ -1,5 +1,5 @@
 /**
- * @module actions/colorCode
+ * @module actions/colorList
  */
 
 /**
@@ -31,8 +31,9 @@ const logColors = (studentList) =>
         Rb(`No students found ... \nImport a file or manually add students`)
       );
 
-export const listPassing = (fileHandler) => async () => {
-  const { tempDir, tempDefault, readFlowJson } = fileHandler();
-  const students = await JSON.parse(readFlowJson(tempDir + tempDefault));
+export const colorList = (fileHandler) => async () => {
+  const { paths, readFlowJson } = fileHandler();
+  const { studentsWritePath } = paths;
+  const students = await JSON.parse(readFlowJson(studentsWritePath));
   logColors(students);
 };

@@ -8,13 +8,13 @@ import { FileHandler } from "../lib/fs.js";
 import { addStudent } from "./addStudent.js";
 import { importHandler } from "./import.js";
 import { exportHandler } from "./export.js";
-import { listPassing } from "./listPassing.js";
+import { colorList } from "./colorList.js";
 import { clearData } from "./clearData.js";
 import { createGroupsHandler } from "./createGroups.js";
 
 export const handlers = [
   addStudent,
-  listPassing,
+  colorList,
   importHandler,
   exportHandler,
   createGroupsHandler,

@@ -3,11 +3,12 @@
  */
 
 import fs from "fs";
-import os from "os";
 import csv from "csvtojson";
 import { parse } from "json2csv";
 import { writeFile } from "node:fs/promises";
+import { pathResolver } from "./path.js";
 import { Y } from "./decor.js";
+
 const { name, avg, group } = Object.freeze({
   name: new RegExp(/name|studentname/i),
   avg: new RegExp(/avg|average|gpa/i),
@@ -44,17 +45,12 @@ const asyncTryCatch =
     }
   };
 
-const getAbsolutePath = (input) => `${process.cwd()}/${input}`;
-
 const readFlowJson = (path) => fs.readFileSync(path);
 
 const convertCsvToJson = async (absPath) =>
   await csv()
     .fromFile(absPath)
     .then((jsonArr) => getFields(jsonArr));
-
-const initStorage = async (pathToTemp) =>
-  await writeFile(pathToTemp, JSON.stringify([]));
 
 const writeToTemp = async (pathToTemp, data) => {
   await writeFile(pathToTemp, JSON.stringify(data));
@@ -66,7 +62,7 @@ const clearStorage = (storagePath) => writeToTemp(storagePath, []);
 const convertJsonToCsv = (jsonData) => parse(jsonData);
 
 const convertGroupsJsonToCsv = (jsonData) =>
-  parse(jsonData, { fields: ['name', 'avg', 'group'] });
+  parse(jsonData, { fields: ["name", "avg", "group"] });
 
 const exportAsCsv = async (filename, csvdata) =>
   await writeFile(filename, csvdata);
@@ -76,29 +72,18 @@ const exportAsCsv = async (filename, csvdata) =>
  * @constructor
  * @typedef {FileHandler}
  * @type {object}
- * @param {object} source
- * @property {object} source user input
- * @property {string} ext extension of source file
- * @property {string} absolute full path to input file
- * @property {string} tempDir user's os-determined tempfile directory
- * @property {string} tempDefault default name of saved temp file
+ * @param {object || string} input
+ * @param {object} paths
  * @property {Function} readFlowJson pipe file into readable json
  * @property {Function} convertCsvToJson convert csv to json
  * @property {Function} initStorage create temp file if not exists
  * @property {Function} writeToTemp write data to temp file
- * @property {Function} convertJsonToCsv covert json to csv
+ * @property {Function} convertJsonToCsv convert json to csv
  */
-export const FileHandler = (source = {}) => ({
-  source,
-  ext: Object.keys(source).length
-    ? source.match(new RegExp(/\.(csv|json)/))[0]
-    : "",
-  absolute: getAbsolutePath(source),
-  tempDir: os.tmpdir(),
-  tempDefault: `/grouper-students.json`,
+export const FileHandler = (input = {}) => ({
+  paths: pathResolver(input),
   readFlowJson,
   convertCsvToJson,
-  initStorage,
   writeToTemp,
   clearStorage,
   convertJsonToCsv,
