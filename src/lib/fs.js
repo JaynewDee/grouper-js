@@ -2,16 +2,16 @@
  * @module lib
  */
 
-import fs from 'fs';
-import os from 'os';
-import csv from 'csvtojson';
-import { parse } from 'json2csv';
-import { writeFile } from 'node:fs/promises';
-
+import fs from "fs";
+import os from "os";
+import csv from "csvtojson";
+import { parse } from "json2csv";
+import { writeFile } from "node:fs/promises";
+import { Y } from "./decor.js";
 const { name, avg, group } = Object.freeze({
   name: new RegExp(/name|studentname/i),
   avg: new RegExp(/avg|average|gpa/i),
-  group: new RegExp(/group|team|/i),
+  group: new RegExp(/group|team|/i)
 });
 
 const getFields = (studentsArr) =>
@@ -29,6 +29,21 @@ const getFields = (studentsArr) =>
     )
   );
 
+const asyncTryCatch =
+  (fn) =>
+  async (...fnArgs) => {
+    try {
+      return await fn(...fnArgs);
+    } catch (err) {
+      console.warn(err);
+      console.log(
+        Y(`Something went wrong while handling your file.
+     Please verify that the relative path to the file is correct.`)
+      );
+      process.exit(1);
+    }
+  };
+
 const getAbsolutePath = (input) => `${process.cwd()}/${input}`;
 
 const readFlowJson = (path) => fs.readFileSync(path);
@@ -43,7 +58,7 @@ const initStorage = async (pathToTemp) =>
 
 const writeToTemp = async (pathToTemp, data) => {
   await writeFile(pathToTemp, JSON.stringify(data));
-  console.log('Access the CSV file at: ' + pathToTemp);
+  console.log("Access the CSV file at: " + pathToTemp);
 };
 
 const clearStorage = (storagePath) => writeToTemp(storagePath, []);
@@ -77,7 +92,7 @@ export const FileHandler = (source = {}) => ({
   source,
   ext: Object.keys(source).length
     ? source.match(new RegExp(/\.(csv|json)/))[0]
-    : '',
+    : "",
   absolute: getAbsolutePath(source),
   tempDir: os.tmpdir(),
   tempDefault: `/grouper-students.json`,
@@ -89,4 +104,5 @@ export const FileHandler = (source = {}) => ({
   convertJsonToCsv,
   convertGroupsJsonToCsv,
   exportAsCsv,
+  asyncTryCatch
 });

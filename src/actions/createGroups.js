@@ -12,14 +12,14 @@ const handleUnassignedStudents = (
   for (let i = 1; i <= numGroups; i++) {
     groups[`group_${i}`] = Object.values(map)
       .flat()
-      .filter((student) => student['group'] === i);
+      .filter((student) => student["group"] === i);
   }
   let unfinishedGroups = Object.values(groups).filter(
     (group) => group.length < groupSize
   );
 
   if (!unassignedStudents.length && !unfinishedGroups.length) {
-    console.log('All students assigned to groups!');
+    console.log("All students assigned to groups!");
     return groups;
   }
 
@@ -27,8 +27,8 @@ const handleUnassignedStudents = (
     if (unfinishedGroups.length) {
       unfinishedGroups.forEach((group) => {
         if (unassignedStudents.length) {
-          unassignedStudents[unassignedStudents.length - 1]['group'] =
-            group[0]?.['group'];
+          unassignedStudents[unassignedStudents.length - 1]["group"] =
+            group[0]?.["group"];
           group.push(unassignedStudents.pop());
         }
       });
@@ -38,12 +38,12 @@ const handleUnassignedStudents = (
     } else {
       let randomGroupIdx = getRandomIdx(Object.values(groups).length);
       let randomGroup = Object.values(groups)[randomGroupIdx];
-      unassignedStudents[unassignedStudents.length - 1]['group'] =
-        randomGroup[0]?.['group'];
+      unassignedStudents[unassignedStudents.length - 1]["group"] =
+        randomGroup[0]?.["group"];
       randomGroup.push(unassignedStudents.pop());
     }
   }
-  console.log('All students assigned to groups!');
+  console.log("All students assigned to groups!");
   return groups;
 };
 
@@ -56,10 +56,10 @@ const createGroups = (map, numGroups) => {
   let i = 1;
   while (i <= numGroups) {
     Object.values(map).forEach((value) => {
-      if (value.filter((v) => !v['group']).length) {
+      if (value.filter((v) => !v["group"]).length) {
         let randomIdx = getRandomIdx(value.length);
         let randomStudent = value[randomIdx];
-        randomStudent['group'] = i;
+        randomStudent["group"] = i;
       }
     });
     i++;
@@ -67,7 +67,7 @@ const createGroups = (map, numGroups) => {
 
   let unassignedStudents = [];
   Object.values(map).forEach((value) => {
-    let groupUnassigned = value.filter((v) => !v['group']);
+    let groupUnassigned = value.filter((v) => !v["group"]);
     unassignedStudents = [...unassignedStudents, ...groupUnassigned];
   });
   return handleUnassignedStudents(
@@ -84,14 +84,14 @@ const sortByAverages = (records, numGroups) => {
     above: [],
     below: [],
     outliersBelow: [],
-    outliersAbove: [],
+    outliersAbove: []
   };
   let classAvg =
-    students.map((r) => parseInt(r['avg'])).reduce((a, b) => a + b) /
+    students.map((r) => parseInt(r["avg"])).reduce((a, b) => a + b) /
     students.length;
 
   students.forEach((r) => {
-    let avg = parseInt(r['avg']);
+    let avg = parseInt(r["avg"]);
     if (avg < 70) classMap.outliersBelow.push(r);
     else if (avg > 90) classMap.outliersAbove.push(r);
     else if (avg < classAvg) classMap.below.push(r);
@@ -100,7 +100,7 @@ const sortByAverages = (records, numGroups) => {
   return createGroups(classMap, numGroups);
 };
 
-export const createGroupsHandler = (fileHandler) => async (input, options) => {
+export const createGroupsHandler = (fileHandler) => async (input) => {
   const { readFlowJson, tempDir, tempDefault, writeToTemp } = fileHandler();
   if (!input) throw new Error('Please provide a number of groups to create');
   const students = await readFlowJson(tempDir + tempDefault);
