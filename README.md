@@ -1,8 +1,20 @@
 # CLI-based Student Management
 
-### HOW TO CONTRIBUTE
+## INSTALLATION
 
 - After cloning, install the project as a global npm package:
   > - (from root): `npm i -g .`
   > - close all terminals
   > - run `grouper` at the terminal to verify installation
+
+## BASIC USAGE
+
+| Command                      | Description                         | Options                                                               |
+| ---------------------------- | ----------------------------------- | --------------------------------------------------------------------- | 
+| `color-list`                 | List students and color code by GPA | N/A                                                                   |
+| `add-student`                | Manually add a single student       | N/A                                                                   |
+| `import <file-path>`         | Import local file                   | `file-path` Path to local file (required)                            |
+| `export`                     | Export current class collections    | `-ft --filetype <type>` Type of export file, default: csv <br> ` -ct --collection-type <type> ` Type of collection to export, default: students, other: groups |
+| `create-groups <num-groups>` | Create a given number of groups     | `num-groups` Number of groups to create (required)                   |
+
+### HOW TO CONTRIBUTE

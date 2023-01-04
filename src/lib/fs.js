@@ -66,7 +66,7 @@ const clearStorage = (storagePath) => writeToTemp(storagePath, []);
 const convertJsonToCsv = (jsonData) => parse(jsonData);
 
 const convertGroupsJsonToCsv = (jsonData) =>
-  parse(jsonData, { fields: ["name", "avg", "group"] });
+  parse(jsonData, { fields: ['name', 'avg', 'group'] });
 
 const exportAsCsv = async (filename, csvdata) =>
   await writeFile(filename, csvdata);
