@@ -12,19 +12,11 @@ import { Student } from "../lib/models.js";
  */
 
 export const importHandler = (fileHandler) => async (input) => {
-  const {
-    tempDir,
-    tempDefault,
-    readFlowJson,
-    convertCsvToJson,
-    writeToTemp,
-    asyncTryCatch,
-    paths
-  } = fileHandler(input);
-
-  const temp = tempDir + tempDefault;
+  const { readFlowJson, convertCsvToJson, writeToTemp, asyncTryCatch, paths } =
+    fileHandler(input);
 
   const { ext, localAbsolute, studentsWritePath } = paths;
+
   if (ext === ".csv") {
     const jsonArray = await asyncTryCatch(convertCsvToJson)(localAbsolute);
     const students = jsonArray.map((student) =>

@@ -64,7 +64,7 @@ const clearStorage = (storagePath) => writeToTemp(storagePath, []);
 const convertJsonToCsv = (jsonData) => parse(jsonData);
 
 const convertGroupsJsonToCsv = (jsonData) =>
-  parse(jsonData, { fields: ['name', 'avg', 'group'] });
+  parse(jsonData, { fields: ["name", "avg", "group"] });
 
 const exportAsCsv = async (filename, csvdata) =>
   await writeFile(filename, csvdata);
@@ -75,11 +75,7 @@ const exportAsCsv = async (filename, csvdata) =>
  * @typedef {FileHandler}
  * @type {object}
  * @param {object || string} input
- * @property {object} input user input
- * @property {string} ext extension of source file
- * @property {string} absolute full path to input file
- * @property {string} tempDir user's os-determined tempfile directory
- * @property {string} tempDefault default name of saved temp file
+ * @param {object} paths
  * @property {Function} readFlowJson pipe file into readable json
  * @property {Function} convertCsvToJson convert csv to json
  * @property {Function} initStorage create temp file if not exists

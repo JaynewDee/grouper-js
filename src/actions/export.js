@@ -12,29 +12,30 @@ export const exportHandler = (fileHandler) => async (input, options) => {
     convertJsonToCsv,
     convertGroupsJsonToCsv,
     readFlowJson,
-    tempDir,
-    tempDefault,
     exportAsCsv,
+    paths
   } = fileHandler();
 
+  const { studentsWritePath, groupsWritePath } = paths;
   const { filetype, collectionType } = input;
-  if (collectionType === 'students') {
-    if (filetype === 'csv') {
+
+  if (collectionType === "students") {
+    if (filetype === "csv") {
       try {
-        const tempData = JSON.parse(readFlowJson(tempDir + tempDefault));
+        const tempData = JSON.parse(readFlowJson(studentsWritePath));
         const csv = convertJsonToCsv(tempData);
-        await exportAsCsv('./students.csv', csv);
+        await exportAsCsv("./students.csv", csv);
       } catch (err) {
         console.error(err);
       }
     }
-  } else if (collectionType === 'groups') {
+  } else if (collectionType === "groups") {
     try {
       const classArr = [];
-      const tempData = JSON.parse(readFlowJson(tempDir + '/groups.json'));
+      const tempData = JSON.parse(readFlowJson(groupsWritePath));
       Object.values(tempData).forEach((group) => classArr.push(...group));
       const csv = convertGroupsJsonToCsv(classArr);
-      await exportAsCsv('./groups.csv', csv);
+      await exportAsCsv("./groups.csv", csv);
     } catch (err) {
       console.error(err);
     }
