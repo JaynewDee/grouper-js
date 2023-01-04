@@ -1,9 +1,10 @@
 import inquirer from "inquirer";
-import { addStudent, confirmClear } from "./prompts.js";
+import { addStudent, getFileToClear, confirmClear } from "./prompts.js";
 
 const { prompt } = inquirer;
 
 const addStudentPrompt = async () => await prompt(addStudent);
+const fileClearPrompt = async () => await prompt(getFileToClear);
 const confirmClearPrompt = async () => await prompt(confirmClear);
 
-export { addStudentPrompt, confirmClearPrompt };
+export { addStudentPrompt, fileClearPrompt, confirmClearPrompt };
