@@ -10,8 +10,8 @@ import { sep, extname } from "path";
  * @returns {object[...string]}
  */
 
-export const pathResolver = (input = "") => ({
-  ext: extname(input),
+export const pathResolver = (input) => ({
+  ext: typeof input === "string" ? extname(input) : "",
   localAbsolute: `${process.cwd()}/${input}`,
   studentsWritePath: tmpdir() + `${sep}students.json`,
   groupsWritePath: tmpdir() + `${sep}groups.json`
