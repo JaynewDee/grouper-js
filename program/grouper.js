@@ -12,7 +12,8 @@ const [
   handleImport,
   handleExport,
   handleCreateGroups,
-  handleClearData
+  handleClearData,
+  handleAssign
 ] = handlers;
 
 const PROGRAM_NAME = "GROUPER";
@@ -31,7 +32,8 @@ const [
   ImportLocal,
   ExportCollections,
   CreateGroups,
-  ClearData
+  ClearData,
+  Assign
 ] = [
   Cmnd("add-student", "Manually add a single student", handleAddStudent),
   Cmnd("color-list", "List students and color code by gpa", handleColorCode),
@@ -42,7 +44,8 @@ const [
     "Create a given number of groups",
     handleCreateGroups
   ),
-  Cmnd("empty", "Clear specified filestore", handleClearData)
+  Cmnd("empty", "Clear specified filestore", handleClearData),
+  Cmnd("assign <group_size>", "Assign groups", handleAssign)
 ].map((fn) => fn(program));
 
 ExportCollections.option(
