@@ -29,8 +29,6 @@ const processRecords = (records, columnName, groupSize) => {
   const finalized = assignOutliers(groups, outliers, targetGroups);
   const avgs = calcGroupAvgs(finalized);
   const classAvg = calcAvg(records, columnName);
-  console.log(classAvg);
-  console.log(avgs);
   return finalized;
 };
 
@@ -66,9 +64,9 @@ const popOutliers = (sorted, remainder) => {
 const calcGroupAvgs = (groups) => {
   const groupAvgs = setupGroupsObject(Object.keys(groups).length);
   for (const group in groups) {
+    const g = groups[group];
     groupAvgs[group] = round(
-      groups[group].reduce((acc, obj) => (acc += obj["avg"]), 0) /
-        groups[group].length
+      g.reduce((acc, obj) => (acc += obj["avg"]), 0) / g.length
     );
   }
   return groupAvgs;
