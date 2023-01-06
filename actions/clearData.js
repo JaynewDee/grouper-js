@@ -25,7 +25,7 @@ export const clearData = (fileHandler) => async () => {
 
   if (isAGo.confirmClearAgain) {
     clearSwitch(fileToClear);
-    console.log(`${fileToClear} collection emptied.`);
+    console.log(`${fileToClear.toUpperCase()} collection emptied.`);
     return;
   }
 
