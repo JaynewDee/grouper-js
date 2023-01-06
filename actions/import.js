@@ -12,13 +12,16 @@ import { Student } from "../lib/models.js";
  */
 
 export const importHandler = (fileHandler) => async (input) => {
-  const { readFlowJson, convertCsvToJson, writeToTemp, asyncTryCatch, paths } =
+  const { readFlowJson, parser, writeToTemp, asyncTryCatch, paths } =
     fileHandler(input);
 
   const { ext, localAbsolute, studentsWritePath } = paths;
 
   if (ext === ".csv") {
-    const jsonArray = await asyncTryCatch(convertCsvToJson)(localAbsolute);
+    const jsonArray = await asyncTryCatch(
+      parser("formattedCsv")(localAbsolute)
+    )(localAbsolute);
+
     const students = jsonArray.map((student) =>
       Student(student.name, student.avg, student.group)
     );
