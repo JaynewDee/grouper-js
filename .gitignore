@@ -1,3 +1,6 @@
 node_modules
 .env
 ./memory.md
+test-bcs.csv
+test.csv
+test2.csv
