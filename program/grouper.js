@@ -11,7 +11,8 @@ const [
   handleColorCode,
   handleImport,
   handleExport,
-  handleCreateGroups
+  handleCreateGroups,
+  handleClearData
 ] = handlers;
 
 const PROGRAM_NAME = "GROUPER";
@@ -24,7 +25,14 @@ const program = new Command()
 const Cmnd = (cmndName, description, action) => (program) =>
   program.command(cmndName).description(description).action(action);
 
-const [AddStudent, ColorCode, ImportLocal, ExportCollections, CreateGroups] = [
+const [
+  AddStudent,
+  ColorCode,
+  ImportLocal,
+  ExportCollections,
+  CreateGroups,
+  ClearData
+] = [
   Cmnd("add-student", "Manually add a single student", handleAddStudent),
   Cmnd("color-list", "List students and color code by gpa", handleColorCode),
   Cmnd("import <file-path>", "Import local file", handleImport),
@@ -33,7 +41,8 @@ const [AddStudent, ColorCode, ImportLocal, ExportCollections, CreateGroups] = [
     "create-groups <num-groups>",
     "Create a given number of groups",
     handleCreateGroups
-  )
+  ),
+  Cmnd("empty", "Clear specified filestore", handleClearData)
 ].map((fn) => fn(program));
 
 ExportCollections.option(

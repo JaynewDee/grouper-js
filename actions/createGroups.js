@@ -102,9 +102,13 @@ const sortByAverages = (records, numGroups) => {
 export const createGroupsHandler = (fileHandler) => async (input) => {
   const { readFlowJson, paths, writeToTemp } = fileHandler();
   const { studentsWritePath, groupsWritePath } = paths;
+
   if (!input) throw new Error("Please provide a number of groups to create");
+
   const students = await readFlowJson(studentsWritePath);
   const groups = sortByAverages(students, parseInt(input));
+
   Object.values(groups).forEach((g) => console.table(g));
+
   await writeToTemp(groupsWritePath, groups);
 };

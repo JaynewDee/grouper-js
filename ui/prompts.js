@@ -37,18 +37,27 @@ const fileConflict = [
   }
 ];
 
+const getFileToClear = [
+  {
+    type: "list",
+    name: "fileToClear",
+    message: "Which file do you wish to empty?",
+    choices: ["students", "groups"]
+  }
+];
+
 const confirmClear = [
   {
     type: "confirm",
     name: "confirmClear",
-    message: "Are you sure you want to clear all local group data?"
+    message: "Are you sure you want to clear the specified data?"
   },
   {
     type: "confirm",
     name: "confirmClearAgain",
-    message: "You'll lose everything ... Continue?",
+    message: "Your file will be unrecoverable ... Continue?",
     when: (ans) => ans.confirmClear
   }
 ];
 
-export { addStudent, fileConflict, confirmClear };
+export { addStudent, fileConflict, getFileToClear, confirmClear };

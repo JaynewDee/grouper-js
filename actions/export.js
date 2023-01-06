@@ -8,13 +8,7 @@
  */
 
 export const exportHandler = (fileHandler) => async (input, options) => {
-  const {
-    convertJsonToCsv,
-    convertGroupsJsonToCsv,
-    readFlowJson,
-    exportAsCsv,
-    paths
-  } = fileHandler();
+  const { parser, readFlowJson, exportAsCsv, paths } = fileHandler();
 
   const { studentsWritePath, groupsWritePath } = paths;
   const { fileType, collectionType } = input;
@@ -23,7 +17,7 @@ export const exportHandler = (fileHandler) => async (input, options) => {
     if (fileType === "csv") {
       try {
         const tempData = JSON.parse(readFlowJson(studentsWritePath));
-        const csv = convertJsonToCsv(tempData);
+        const csv = await parser("formattedJson", tempData)();
         await exportAsCsv("./students.csv", csv);
       } catch (err) {
         console.error(err);
@@ -34,7 +28,7 @@ export const exportHandler = (fileHandler) => async (input, options) => {
       const classArr = [];
       const tempData = JSON.parse(readFlowJson(groupsWritePath));
       Object.values(tempData).forEach((group) => classArr.push(...group));
-      const csv = convertGroupsJsonToCsv(classArr);
+      const csv = await parser("groupsJson", classArr)();
       await exportAsCsv("./groups.csv", csv);
     } catch (err) {
       console.error(err);
