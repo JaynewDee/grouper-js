@@ -1,6 +1,6 @@
 {
   "name": "group-maker",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "",
   "main": "main.js",
   "type": "module",
@@ -16,11 +16,9 @@
     "csvtojson": "^2.0.10",
     "dotenv": "^16.0.3",
     "figures": "^5.0.0",
-    "group-maker": "^1.0.2",
     "inquirer": "^9.1.4",
     "json2csv": "^5.0.7",
-    "nanoid": "^4.0.0",
-    "store2": "^2.14.2"
+    "nanoid": "^4.0.0"
   },
   "jest": {
     "testEnvironment": "node"
