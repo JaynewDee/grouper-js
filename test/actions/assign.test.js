@@ -2,6 +2,7 @@
  * Test //actions// module
  */
 import { should, expect } from "chai";
+const { floor } = Math;
 should();
 expect();
 
@@ -18,7 +19,7 @@ import {
   assign
 } from "../../actions/assign.js";
 
-const { sortDesc, getRandIdx, calcAvg } = utils;
+const { sortDesc } = utils;
 
 // Mocks the test file 'test-bcs.csv'
 const parsed = [
@@ -56,6 +57,7 @@ const parsed = [
 ];
 
 const sorted = sortDesc(parsed, "avg");
+
 describe("sortDesc utility function", () => {
   it("should return sorted results", () => {
     expect(sorted[0].avg > sorted[sorted.length - 1].avg).to.be.true;
@@ -87,23 +89,50 @@ describe("partition function", () => {
 
 describe("setupGroubsObject function", () => {
   it("should return array when array-type passed", () => {
-    const numberedGroups = setupGroupsObject(6, "array");
+    const numberedGroups = setupGroupsObject(10, "array");
     Object.values(numberedGroups).forEach((val) => {
       expect(typeof val === "object").to.be.true;
       expect(val.length).to.equal(0);
     });
   });
   it("should return number when type not passed", () => {
-    const numberedGroups = setupGroupsObject(6);
+    const numberedGroups = setupGroupsObject(10);
     Object.values(numberedGroups).forEach((val) => {
       expect(typeof val === "number").to.be.true;
       expect(val).to.equal(0);
     });
   });
   it("should return correct number of groups", () => {
-    const isFifty = setupGroupsObject(50);
-    Object.keys(isFifty).length.should.equal(50);
-    const isSeven = setupGroupsObject(7, "array");
-    Object.keys(isSeven).length.should.equal(7);
+    Object.keys(setupGroupsObject(50)).length.should.equal(50);
+    Object.keys(setupGroupsObject(7, "array")).length.should.equal(7);
+    Object.keys(setupGroupsObject(11, "array")).length.should.equal(11);
   });
 });
+
+describe("assign function", () => {
+  const numStudents = parsed.length;
+  const numGroups = floor(numStudents / 4);
+  const remainder = numStudents % 4;
+  const sorted = sortDesc(parsed, "avg");
+  const [outliers, pruned] = partition(sorted, remainder);
+  const groupsMap = setupGroupsObject(numGroups, "array");
+  const groups = assign(1, pruned, groupsMap, numGroups);
+
+  it("should return appropriately-formatted object", () => {
+    expect(Object.keys(groups).length).to.equal(numGroups);
+  });
+});
+
+describe("calcGroupAvgs function", () => {
+  const numStudents = parsed.length;
+  const numGroups = floor(numStudents / 4);
+  const remainder = numStudents % 4;
+  const sorted = sortDesc(parsed, "avg");
+  const [outliers, pruned] = partition(sorted, remainder);
+  const groupsMap = setupGroupsObject(numGroups, "array");
+  const groups = assign(1, pruned, groupsMap, numGroups);
+
+  const groupAvgs = calcGroupAvgs(groups);
+});
+
+describe("findTargetGroup function", () => {});

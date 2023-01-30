@@ -16,7 +16,6 @@ export const partition = (sorted, remainder) => {
 };
 
 export const processRecords = (records, columnName, groupSize) => {
-  console.log(records);
   const { sortDesc, calcAvg } = utils;
   const numStudents = records.length;
   const numGroups = floor(numStudents / groupSize);
@@ -26,6 +25,8 @@ export const processRecords = (records, columnName, groupSize) => {
   const groupsMap = setupGroupsObject(numGroups, "array");
   const groups = assign(1, pruned, groupsMap, numGroups);
   const groupAvgs = calcGroupAvgs(groups);
+  console.log(groupAvgs);
+
   const targetGroups = findTargetGroup(groupAvgs, outliers.length, []);
   const finalized = assignOutliers(groups, outliers, targetGroups);
   const avgs = calcGroupAvgs(finalized);
@@ -82,7 +83,6 @@ export const setupGroupsObject = (numGroups, type) => {
     groupsNumbered[i] = fillValue;
     i++;
   }
-  console.log(groupsNumbered);
   return groupsNumbered;
 };
 
