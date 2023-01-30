@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-'use strict';
+"use strict";
 
-import program from './program/grouper.js';
-import {} from 'dotenv/config';
+import program from "./program/grouper.js";
+import {} from "dotenv/config";
 
 program.parse();
