@@ -9,7 +9,6 @@ import { addStudent } from './addStudent.js';
 import { exportHandler } from './export.js';
 import { colorList } from './colorList.js';
 import { clearData } from './clearData.js';
-import { createGroupsHandler } from './createGroups.js';
 import { assignGroups } from './assign.js';
 
 export const handlers = [
