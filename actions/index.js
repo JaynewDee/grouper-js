@@ -14,9 +14,7 @@ import { assignGroups } from './assign.js';
 export const handlers = [
   addStudent,
   colorList,
-  importHandler,
   exportHandler,
-  createGroupsHandler,
   clearData,
   assignGroups,
 ].map((fn) => fn(FileHandler));
