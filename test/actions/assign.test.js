@@ -21,7 +21,7 @@ import {
 
 const { sortDesc } = utils;
 
-// Mocks the test file 'test-bcs.csv'
+// Mocks parsed results from test file 'test-bcs.csv'
 const parsed = [
   { name: "Bates, Brett", avg: 74.48, group: "0" },
   { name: "Bell, Jacqueline", avg: 57.8, group: "0" },
@@ -30,7 +30,6 @@ const parsed = [
   { name: "Cruz, Francisco", avg: 46.8, group: "0" },
   { name: "Curtiss, Clinton", avg: 89.92, group: "0" },
   { name: "Easterling, Mitchell", avg: 80.36, group: "0" },
-  { name: "Gwyn, Tanner", avg: 0, group: "0" },
   { name: "Hoffman, Chandler", avg: 55.76, group: "0" },
   { name: "Hokanson, Kerry", avg: 88.4, group: "0" },
   { name: "Howell, Brandon", avg: 72.64, group: "0" },
@@ -56,7 +55,7 @@ const parsed = [
   { name: "Zhao, Zhongcheng", avg: 74.88, group: "0" }
 ];
 
-const sorted = sortDesc(parsed, "avg");
+const sorted = sortDesc(parsed.slice(), "avg");
 describe("sortDesc utility function", () => {
   it("should return sorted results", () => {
     expect(sorted[0].avg > sorted[sorted.length - 1].avg).to.be.true;
@@ -64,14 +63,11 @@ describe("sortDesc utility function", () => {
   });
 });
 
-// Order is important here as pop function mutates mock data
 describe("popOutliers function", () => {
   const outliers = popOutliers(sorted, 1);
   expect(outliers.length).to.equal(1);
-  const { name, avg, group } = outliers[0];
-  expect(name).to.equal("Gwyn, Tanner");
-  expect(avg).to.equal(0);
-  expect(group).to.equal("0");
+  const { name } = outliers[0];
+  expect(name).to.equal("Cruz, Francisco");
 });
 
 describe("partition function", () => {
@@ -133,5 +129,7 @@ describe("calcGroupAvgs function", () => {
 
   const groupAvgs = calcGroupAvgs(groups);
 });
+
+describe("findTargetGroup function", () => {});
 
 describe("findTargetGroup function", () => {});

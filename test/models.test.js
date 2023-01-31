@@ -4,7 +4,7 @@ should();
 expect();
 
 describe("Student constructor", () => {
-  it("should instantiate object of appropriate shape", () => {
+  it("should return entity of appropriate shape", () => {
     const test = { name: "Joshua", avg: 100 };
     const { name, avg, group } = Student(test.name, test.avg);
 

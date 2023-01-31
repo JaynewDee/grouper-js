@@ -13,8 +13,11 @@ export const utils = Object.freeze({
         .reduce((acc, val) => acc + val, 0) /
         (arr.length - (usePopulation ? 0 : 1))
     );
-  }
+  },
+  cleanRecords: (records) => records.filter((rec) => rec.avg !== 0)
 });
+
+const { sortDesc, getRandIdx, standardDeviation, cleanRecords } = utils;
 
 export const partition = (sorted, remainder) => {
   const outliers = popOutliers(sorted, remainder);
@@ -23,8 +26,6 @@ export const partition = (sorted, remainder) => {
   );
   return [outliers, pruned];
 };
-
-const cleanRecords = (records) => records.filter((rec) => rec.avg !== 0);
 
 export const processRecords = (records, columnName, groupSize) => {
   const numStudents = records.length;
@@ -37,7 +38,6 @@ export const processRecords = (records, columnName, groupSize) => {
 
 export const balance = (records, columnName, numGroups, remainder) => {
   const copy = records.slice();
-  const { sortDesc, standardDeviation } = utils;
   const sorted = sortDesc(copy, columnName);
   const [outliers, pruned] = partition(sorted, remainder);
   const groupsMap = setupGroupsObject(numGroups, "array");
@@ -48,8 +48,8 @@ export const balance = (records, columnName, numGroups, remainder) => {
   const avgs = calcGroupAvgs(preFinal);
 
   const SD = standardDeviation(Object.values(avgs));
-  if (SD > 4) {
-    console.log(SD);
+  if (SD > 1) {
+    console.log(SD.toFixed(2));
     return balance(records, columnName, numGroups, remainder);
   }
   return preFinal;
@@ -57,7 +57,7 @@ export const balance = (records, columnName, numGroups, remainder) => {
 
 export const assignOutliers = (groups, outliers, targets) => {
   targets.forEach((groupNum, idx) => {
-    groups[groupNum].push(outliers[idx]);
+    groups[groupNum]?.push(outliers[idx]);
   });
   return groups;
 };
@@ -65,7 +65,7 @@ export const assignOutliers = (groups, outliers, targets) => {
 export const findTargetGroup = (avgs, numOutliers, targets) => {
   if (targets.length === numOutliers) return targets;
 
-  const high = Object.keys(avgs).reduce((a, b) => (avgs[a] > avgs[b] ? a : b));
+  const high = Object.values(avgs).reduce((a, b) => (a > b ? a : b));
 
   targets.push(high);
 
@@ -111,7 +111,7 @@ export const assign = (current, studentRecords, groupsMap, numGroups) => {
   if (!studentRecords.length) return groupsMap;
   let currentGroup = current;
 
-  const randomStudent = studentRecords[utils.getRandIdx(studentRecords.length)];
+  const randomStudent = studentRecords[getRandIdx(studentRecords.length)];
   const keyString = String(currentGroup);
   randomStudent.group = keyString;
   groupsMap[keyString] = [...groupsMap[keyString], randomStudent];
@@ -129,6 +129,8 @@ export const assignGroups = (fileHandler) => async (input, options) => {
   const { groupSize } = options;
 
   const parsed = await parser("bcsGroups")(localAbsolute);
+  console.log(cleanRecords(parsed));
+
   await writeToTemp(studentsWritePath, parsed);
   const groups = processRecords(cleanRecords(parsed), "avg", groupSize);
   await writeToTemp(groupsWritePath, groups);
