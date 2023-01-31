@@ -1,5 +1,8 @@
 node_modules
 .env
 memory.md
-test-bcs*
-test*
+test*.csv
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/tests-examples

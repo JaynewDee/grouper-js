@@ -5,12 +5,14 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "mocha --recursive"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "catch-flow": "^1.0.3",
+    "chai": "*",
     "chalk": "^4",
     "commander": "^9.4.1",
     "csvtojson": "^2.0.10",
@@ -18,15 +20,16 @@
     "figures": "^5.0.0",
     "inquirer": "^9.1.4",
     "json2csv": "^5.0.7",
+    "mocha": "*",
     "nanoid": "^4.0.0"
-  },
-  "jest": {
-    "testEnvironment": "node"
   },
   "bin": {
     "grouper": "./main.js"
   },
   "devDependencies": {
-    "jest": "^29.3.1"
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1"
   }
 }
