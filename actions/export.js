@@ -1,12 +1,3 @@
-/**
- * @module actions
- */
-
-/**
- *
- * @param {Function} fileHandler
- */
-
 export const exportHandler = (fileHandler) => async (input, options) => {
   const { parser, readFlowJson, exportAsCsv, paths } = fileHandler();
 
@@ -18,6 +9,7 @@ export const exportHandler = (fileHandler) => async (input, options) => {
       try {
         const tempData = JSON.parse(readFlowJson(studentsWritePath));
         const csv = await parser("formattedJson", tempData)();
+        console.log(typeof csv);
         await exportAsCsv("./students.csv", csv);
       } catch (err) {
         console.error(err);
