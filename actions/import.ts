@@ -5,21 +5,15 @@
 
 import { Student } from "../lib/models.js";
 
-/**
- * @param {Function} fileHandler
- * @param {string} input User-specified filepath.
- * @param {object} options
- */
-
-export const importHandler = (fileHandler) => async (input) => {
+export const importHandler = (fileHandler: any) => async (input: string) => {
   const { readFlowJson, parser, writeToTemp, paths } = fileHandler(input);
 
   const { ext, localAbsolute, studentsWritePath } = paths;
 
   if (ext === ".csv") {
-    const jsonArray = await parser("formattedCsv")(localAbsolute);
+    const jsonArray: any = await parser("formattedCsv", [])(localAbsolute);
 
-    const students = jsonArray.map((student) =>
+    const students = jsonArray.map((student: any) =>
       Student(student.name, student.avg, student.group)
     );
 
@@ -31,7 +25,7 @@ export const importHandler = (fileHandler) => async (input) => {
   }
 
   if (ext === ".json") {
-    const jsonArray = readFlowJson(localAbsolute);
+    const jsonArray: any = readFlowJson(localAbsolute);
     writeToTemp(studentsWritePath, jsonArray);
   }
 };

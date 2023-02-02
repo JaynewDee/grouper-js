@@ -36,7 +36,14 @@ export const processRecords = (records, columnName, groupSize) => {
   return finalized;
 };
 
-export const balance = (records, columnName, numGroups, remainder) => {
+export const balance = (
+  records,
+  columnName,
+  numGroups,
+  remainder,
+  targetSD = 1,
+  iterations = 0
+) => {
   const copy = records.slice();
   const sorted = sortDesc(copy, columnName);
   const [outliers, pruned] = partition(sorted, remainder);
@@ -48,9 +55,28 @@ export const balance = (records, columnName, numGroups, remainder) => {
   const avgs = calcGroupAvgs(preFinal);
 
   const SD = standardDeviation(Object.values(avgs));
-  if (SD > 1) {
-    console.log(SD.toFixed(2));
-    return balance(records, columnName, numGroups, remainder);
+
+  if (SD > targetSD) {
+    if (iterations < 500) {
+      return balance(
+        records,
+        columnName,
+        numGroups,
+        remainder,
+        targetSD,
+        iterations + 1
+      );
+    } else {
+      iterations = 0;
+      return balance(
+        records,
+        columnName,
+        numGroups,
+        remainder,
+        targetSD + 1,
+        iterations
+      );
+    }
   }
   return preFinal;
 };

@@ -6,3 +6,4 @@ test*.csv
 /playwright-report/
 /playwright/.cache/
 /tests-examples
+/build
