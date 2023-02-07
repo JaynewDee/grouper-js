@@ -33,7 +33,7 @@ export const utils: UtilsObject = {
 
 const { sortDesc, getRandIdx, standardDeviation, cleanRecords } = utils;
 
-export const partition = (sorted, remainder) => {
+export const partition = (sorted: StudentType[], remainder) => {
   const outliers = popOutliers(sorted, remainder);
   const pruned = sorted.filter((student) =>
     student in outliers ? false : true
@@ -61,13 +61,14 @@ export const balance = (
   const copy = records.slice();
   const sorted = sortDesc(copy, columnName);
   const [outliers, pruned] = partition(sorted, remainder);
+
   const groupsMap = setupGroupsObject(numGroups, "array");
   const groups = assign(1, pruned, groupsMap, numGroups);
   const groupAvgs = calcGroupAvgs(groups);
   const targetGroups = findTargetGroup(groupAvgs, outliers.length, []);
   const preFinal = assignOutliers(groups, outliers, targetGroups);
-  const avgs = calcGroupAvgs(preFinal);
 
+  const avgs = calcGroupAvgs(preFinal);
   const SD = standardDeviation(Object.values(avgs));
 
   if (SD > targetSD) {
