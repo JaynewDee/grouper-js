@@ -11,7 +11,7 @@
 
 ## INSTALLATION
 
-**Note!**: Though this project is written in JavaScript and distributed as an NPM package,  
+**Note!**: Though this project is written in TypeScript and distributed as an NPM package,  
 it does not require any programming ability to use. The only requirement is that the user have access  
 to NPM/Node from within a terminal.
 
