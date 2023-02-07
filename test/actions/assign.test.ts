@@ -4,7 +4,7 @@
 import { should, expect } from "chai";
 const { floor } = Math;
 should();
-expect();
+// expect();
 
 // * Test assign.js - assign students action / command
 import {
