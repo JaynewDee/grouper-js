@@ -34,7 +34,7 @@ const convertFormattedCsvToJson = async (path: string) =>
 const convertFormattedJsonToCsv = (jsonData: any): ParserReturn =>
   parse(jsonData);
 
-const convertGroupsJsonToCsv = (jsonData: any) =>
+const convertGroupsJsonToCsv = (jsonData: any): ParserReturn =>
   parse(jsonData, { fields: ["name", "avg", "group"] });
 
 const bcsToUsable = async (path: string) =>
@@ -51,6 +51,7 @@ const bcsToUsable = async (path: string) =>
       );
   });
 
+export type ParserData = StudentType[] | [] | any;
 export type ParserReturn =
   | Promise<StudentType[]>
   | Promise<void | {}[]>
@@ -58,8 +59,8 @@ export type ParserReturn =
   | string;
 
 export const FileParser =
-  (type: string, data: [] | StudentType[] = []) =>
-  (path = ""): ParserReturn => {
+  (type: string, data: [] | StudentType[]) =>
+  (path: any): ParserReturn => {
     switch (type) {
       case "formattedCsv":
         return convertFormattedCsvToJson(path);

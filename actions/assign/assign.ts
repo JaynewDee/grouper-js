@@ -1,21 +1,35 @@
+//@ts-nocheck
+
+import { StudentType } from "../../lib/models";
+
 const { round, floor, random, sqrt } = Math;
 
-export const utils = Object.freeze({
-  sortDesc: (recs, col) => recs.sort((a, b) => b[col] - a[col]),
+type Records = any;
+
+interface UtilsObject {
+  sortDesc: (recs: Records, col: any) => Records;
+  getRandIdx: (arrLen: number) => number;
+  standardDeviation: (arr: number[], usePop: boolean) => number;
+  cleanRecords: (recs: Records) => Records;
+}
+
+export const utils: UtilsObject = {
+  sortDesc: (recs, col) => recs.sort((a: any, b: any) => b[col] - a[col]),
   getRandIdx: (arrayLength) => floor(random() * arrayLength),
-  calcAvg: (recs, avgCol) =>
-    round(recs.reduce((acc, val) => (acc += val[avgCol]), 0) / recs.length),
   standardDeviation: (arr, usePopulation = false) => {
-    const mean = arr.reduce((acc, val) => acc + val, 0) / arr.length;
+    const mean: number = arr.reduce((acc, val) => acc + val, 0) / arr.length;
     return sqrt(
       arr
-        .reduce((acc, val) => acc.concat((val - mean) ** 2), [])
+        .reduce(
+          (acc: number[], val: number) => acc.concat((val - mean) ** 2),
+          []
+        )
         .reduce((acc, val) => acc + val, 0) /
         (arr.length - (usePopulation ? 0 : 1))
     );
   },
-  cleanRecords: (records) => records.filter((rec) => rec.avg !== 0)
-});
+  cleanRecords: (records) => records.filter((rec: StudentType) => rec.avg !== 0)
+};
 
 const { sortDesc, getRandIdx, standardDeviation, cleanRecords } = utils;
 
@@ -151,11 +165,11 @@ export const assign = (current, studentRecords, groupsMap, numGroups) => {
 
 export const assignGroups = (fileHandler) => async (input, options) => {
   const { writeToTemp, paths, parser } = fileHandler(input);
-  const { localAbsolute, studentsWritePath, groupsWritePath } = paths;
   const { groupSize } = options;
 
+  const { localAbsolute, studentsWritePath, groupsWritePath } = paths;
+
   const parsed = await parser("bcsGroups")(localAbsolute);
-  console.log(cleanRecords(parsed));
 
   await writeToTemp(studentsWritePath, parsed);
   const groups = processRecords(cleanRecords(parsed), "avg", groupSize);

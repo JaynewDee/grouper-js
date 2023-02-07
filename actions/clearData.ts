@@ -1,15 +1,16 @@
 /**
  * @module actions/clearData
  */
+import { FHType } from "../lib/fs.js";
 import { fileClearPrompt, confirmClearPrompt } from "../ui/index.js";
 
-export const clearData = (fileHandler) => async () => {
+export const clearData = (fileHandler: FHType) => async () => {
   const { clearStorage, paths } = fileHandler();
   const { studentsWritePath, groupsWritePath } = paths;
   const { fileToClear } = await fileClearPrompt();
   const isAGo = await confirmClearPrompt();
 
-  const clearSwitch = (collectionName) => {
+  const clearSwitch = (collectionName: string) => {
     switch (collectionName) {
       case "students":
         clearStorage(studentsWritePath);
@@ -23,7 +24,7 @@ export const clearData = (fileHandler) => async () => {
     }
   };
 
-  if (isAGo.confirmClearAgain) {
+  if (isAGo) {
     clearSwitch(fileToClear);
     console.log(`${fileToClear.toUpperCase()} collection emptied.`);
     return;

@@ -1,3 +1,12 @@
+interface Answers {
+  name: string;
+  avg: number;
+  group: boolean;
+  groupNum?: string;
+  fileExists?: boolean;
+  confirmClear?: boolean;
+}
+
 const addStudent = [
   {
     type: "input",
@@ -18,7 +27,7 @@ const addStudent = [
     type: "number",
     name: "groupNum",
     message: "Insert group # to assign student: ",
-    when: (ans) => ans.group === true
+    when: ({ group }: Answers) => group === true
   }
 ];
 
@@ -33,7 +42,7 @@ const fileConflict = [
     type: "input",
     name: "fileRename",
     message: "Enter a new name for the file: ",
-    when: (ans) => ans.fileExists
+    when: ({ fileExists }: Answers) => fileExists
   }
 ];
 
@@ -56,7 +65,7 @@ const confirmClear = [
     type: "confirm",
     name: "confirmClearAgain",
     message: "Your file will be unrecoverable ... Continue?",
-    when: (ans) => ans.confirmClear
+    when: ({ confirmClear }: Answers) => confirmClear
   }
 ];
 
