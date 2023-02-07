@@ -1,7 +1,6 @@
 import { Student } from "../lib/models.js";
-import { should, expect } from "chai";
+import { should } from "chai";
 should();
-// expect();
 
 describe("Student constructor", () => {
   it("should return entity of appropriate shape", () => {

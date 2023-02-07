@@ -1,6 +1,6 @@
 import { FileHandler } from "../lib/fs.js";
 import { PathResolver } from "../lib/path.js";
-import { should, expect } from "chai";
+import { should } from "chai";
 should();
 // expect();
 

@@ -41,7 +41,7 @@ const [
   Cmnd("empty", "Clear specified filestore", handleClearData),
   Cmnd(
     "assign <path>",
-    "Parse file -> Write students to collections -> Create and assign groups -> Write groups to collections",
+    "Parse file -> Write students to collections -> Create and assign groups -> Write groups to collections -> Export groups as CSV",
     handleAssign
   )
 ].map((fn) => fn(program));
