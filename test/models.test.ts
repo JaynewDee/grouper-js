@@ -1,4 +1,4 @@
-import { Student } from "../lib/models";
+import { Student } from "../lib/models.js";
 import { should, expect } from "chai";
 should();
 // expect();

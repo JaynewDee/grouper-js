@@ -6,7 +6,6 @@ import { Command } from "commander";
 import { TitleDecor } from "../lib/decor.js";
 
 import { handlers } from "../actions/index.js";
-import { FHShape } from "../lib/fs.js";
 const [
   handleAddStudent,
   handleColorCode,
@@ -23,7 +22,6 @@ const program = new Command()
   .version("1.0.0")
   .description(TitleDecor(PROGRAM_NAME));
 
-type ActionType = "";
 const Cmnd =
   (cmndName: string, description: string, action: any) => (program: Command) =>
     program.command(cmndName).description(description).action(action);

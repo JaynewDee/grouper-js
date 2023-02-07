@@ -6,7 +6,7 @@ should();
 
 describe("File system module factory", () => {
   it("should return entity of appropriate shape", () => {
-    const testInstance = FileHandler();
+    const testInstance = FileHandler({});
     Object.entries(testInstance).length.should.equal(6);
   });
 });

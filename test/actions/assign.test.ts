@@ -17,7 +17,7 @@ import {
   calcGroupAvgs,
   setupGroupsObject,
   assign
-} from "../../actions/assign.js";
+} from "../../actions/assign/assign.js";
 
 const { sortDesc } = utils;
 
@@ -64,14 +64,14 @@ describe("sortDesc utility function", () => {
 });
 
 describe("popOutliers function", () => {
-  const outliers = popOutliers(sorted, 1);
+  const outliers: any[] = popOutliers(sorted, 1);
   expect(outliers.length).to.equal(1);
   const { name } = outliers[0];
   expect(name).to.equal("Cruz, Francisco");
 });
 
 describe("partition function", () => {
-  const results = partition(sorted, 1);
+  const results: any[][] = partition(sorted, 1);
 
   it("should return tuple / array pair", () => {
     results.length.should.equal(2);
@@ -85,7 +85,7 @@ describe("partition function", () => {
 describe("setupGroubsObject function", () => {
   it("should return array when array-type passed", () => {
     const numberedGroups = setupGroupsObject(10, "array");
-    Object.values(numberedGroups).forEach((val) => {
+    Object.values(numberedGroups).forEach((val: any) => {
       expect(typeof val === "object").to.be.true;
       expect(val.length).to.equal(0);
     });

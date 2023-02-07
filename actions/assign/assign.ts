@@ -1,9 +1,11 @@
-import { FHType, Input, OptionsObject } from "../../lib/fs";
-import { StudentType } from "../../lib/models";
-
+import ora from "ora";
+import { TitleDecor } from "../../lib/decor.js";
+import { FHType, Input } from "../../lib/fs.js";
+import { StudentType } from "../../lib/models.js";
+import { exportHandler } from "../export.js";
 const { round, floor, random, sqrt } = Math;
 
-import { Records, UtilsObject } from "./types.assign";
+import { Records, UtilsObject } from "./assign.types.js";
 
 export const utils: UtilsObject = {
   sortDesc: (recs, col) => recs.sort((a: any, b: any) => b[col] - a[col]),
@@ -24,27 +26,6 @@ export const utils: UtilsObject = {
 };
 
 const { sortDesc, getRandIdx, standardDeviation, cleanRecords } = utils;
-
-export const partition = (sorted: StudentType[], remainder: number) => {
-  const outliers = popOutliers(sorted, remainder);
-  const pruned = sorted.filter((student: any) =>
-    student in outliers ? false : true
-  );
-  return [outliers, pruned];
-};
-
-export const processRecords = (
-  records: Records,
-  columnName: string,
-  groupSize: number
-) => {
-  const numStudents = records.length;
-  const numGroups = floor(numStudents / groupSize);
-  const remainder = numStudents % groupSize;
-  const finalized = balance(records, columnName, numGroups, remainder);
-
-  return finalized;
-};
 
 export const balance = (
   records: Records,
@@ -90,6 +71,27 @@ export const balance = (
     }
   }
   return preFinal;
+};
+
+export const partition = (sorted: StudentType[], remainder: number) => {
+  const outliers = popOutliers(sorted, remainder);
+  const pruned = sorted.filter((student: any) =>
+    student in outliers ? false : true
+  );
+  return [outliers, pruned];
+};
+
+export const processRecords = (
+  records: Records,
+  columnName: string,
+  groupSize: number
+) => {
+  const numStudents = records.length;
+  const numGroups = floor(numStudents / groupSize);
+  const remainder = numStudents % groupSize;
+  const finalized = balance(records, columnName, numGroups, remainder);
+
+  return finalized;
 };
 
 export const assignOutliers = (
@@ -176,8 +178,25 @@ export const assign = (
   return assign(currentGroup, filteredRecords, groupsMap, numGroups);
 };
 
+const useDelivery = async (data: StudentType[]) => {
+  const spinner = ora("Processing").start();
+
+  let interval = 300;
+  setTimeout(() => {
+    spinner.stop();
+  }, 1000);
+  setTimeout(() => {
+    Object.values(data).forEach((g) => {
+      setTimeout(() => {
+        console.table(g);
+      }, (interval += 300));
+    });
+  }, 1000);
+};
+
 export const assignGroups =
   (fileHandler: FHType) => async (input: Input, options: any) => {
+    console.log(TitleDecor("CSV will be written to current path"));
     const { writeToTemp, paths, parser } = fileHandler(input);
     const { groupSize } = options;
     const { localAbsolute, studentsWritePath, groupsWritePath } = paths;
@@ -188,5 +207,9 @@ export const assignGroups =
     const groups = processRecords(cleanRecords(parsed), "avg", groupSize);
     await writeToTemp(groupsWritePath, groups);
 
-    Object.values(groups).forEach((g) => console.table(g));
+    await useDelivery(groups);
+    await exportHandler(fileHandler)({
+      fileType: ".csv",
+      collectionType: "groups"
+    });
   };
