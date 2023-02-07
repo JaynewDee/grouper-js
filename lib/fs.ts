@@ -35,7 +35,7 @@ const exportAsCsv = async (filename: string, csvdata: any) =>
  * @property {Function} asyncTryCatch
  */
 
-interface FHShape {
+export interface FHShape {
   paths: PResolver;
   parser: (type: string, data: []) => (path: string) => ParserReturn;
   readFlowJson: (path: string) => Buffer;
@@ -44,7 +44,21 @@ interface FHShape {
   exportAsCsv: (filename: string, data: any) => Promise<void>;
 }
 
-export const FileHandler = (input = {}): FHShape => ({
+enum InputType {
+  String = "string",
+  Object = "object"
+}
+
+type OptionsObject = {
+  fileType?: string;
+  collectionType?: string;
+};
+
+export type Input = InputType | OptionsObject | string | any;
+
+export type FHType = (input?: Input) => FHShape;
+
+export const FileHandler = (input: Input): FHShape => ({
   paths: PathResolver(input),
   parser: FileParser,
   readFlowJson,

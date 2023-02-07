@@ -1,6 +1,6 @@
 export interface StudentType {
   name: string;
-  avg: Number;
+  avg: number;
   group: string;
 }
 

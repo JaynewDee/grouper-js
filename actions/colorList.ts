@@ -6,8 +6,9 @@
  * @param {Object[]} studentList json array read from file
  */
 import { Rb, G, B, Y } from "../lib/decor.js";
-
-const getLetter = (avg) =>
+import { StudentType } from "../lib/models.js";
+import { FHType } from "../lib/fs.js";
+const getLetter = (avg: number) =>
   avg <= 100 && avg >= 90
     ? "A"
     : avg <= 89 && avg >= 80
@@ -16,7 +17,7 @@ const getLetter = (avg) =>
     ? "C"
     : "F";
 
-const logColors = (studentList) =>
+const logColors = (studentList: StudentType[]) =>
   studentList && studentList.length
     ? studentList.map(({ name, avg }) =>
         getLetter(avg) === "A"
@@ -31,9 +32,10 @@ const logColors = (studentList) =>
         Rb(`No students found ... \nImport a file or manually add students`)
       );
 
-export const colorList = (fileHandler) => async () => {
+export const colorList = (fileHandler: FHType) => async () => {
   const { paths, readFlowJson } = fileHandler();
   const { studentsWritePath } = paths;
-  const students = await JSON.parse(readFlowJson(studentsWritePath));
-  logColors(students);
+  const students = readFlowJson(studentsWritePath).toString();
+  const parsed = await JSON.parse(students);
+  logColors(parsed);
 };

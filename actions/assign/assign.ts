@@ -1,25 +1,39 @@
+//@ts-nocheck
+
+import { StudentType } from "../../lib/models";
+
 const { round, floor, random, sqrt } = Math;
 
-export const utils = Object.freeze({
-  sortDesc: (recs, col) => recs.sort((a, b) => b[col] - a[col]),
+type Records = any;
+
+interface UtilsObject {
+  sortDesc: (recs: Records, col: any) => Records;
+  getRandIdx: (arrLen: number) => number;
+  standardDeviation: (arr: number[], usePop: boolean) => number;
+  cleanRecords: (recs: Records) => Records;
+}
+
+export const utils: UtilsObject = {
+  sortDesc: (recs, col) => recs.sort((a: any, b: any) => b[col] - a[col]),
   getRandIdx: (arrayLength) => floor(random() * arrayLength),
-  calcAvg: (recs, avgCol) =>
-    round(recs.reduce((acc, val) => (acc += val[avgCol]), 0) / recs.length),
   standardDeviation: (arr, usePopulation = false) => {
-    const mean = arr.reduce((acc, val) => acc + val, 0) / arr.length;
+    const mean: number = arr.reduce((acc, val) => acc + val, 0) / arr.length;
     return sqrt(
       arr
-        .reduce((acc, val) => acc.concat((val - mean) ** 2), [])
+        .reduce(
+          (acc: number[], val: number) => acc.concat((val - mean) ** 2),
+          []
+        )
         .reduce((acc, val) => acc + val, 0) /
         (arr.length - (usePopulation ? 0 : 1))
     );
   },
-  cleanRecords: (records) => records.filter((rec) => rec.avg !== 0)
-});
+  cleanRecords: (records) => records.filter((rec: StudentType) => rec.avg !== 0)
+};
 
 const { sortDesc, getRandIdx, standardDeviation, cleanRecords } = utils;
 
-export const partition = (sorted, remainder) => {
+export const partition = (sorted: StudentType[], remainder) => {
   const outliers = popOutliers(sorted, remainder);
   const pruned = sorted.filter((student) =>
     student in outliers ? false : true
@@ -47,13 +61,14 @@ export const balance = (
   const copy = records.slice();
   const sorted = sortDesc(copy, columnName);
   const [outliers, pruned] = partition(sorted, remainder);
+
   const groupsMap = setupGroupsObject(numGroups, "array");
   const groups = assign(1, pruned, groupsMap, numGroups);
   const groupAvgs = calcGroupAvgs(groups);
   const targetGroups = findTargetGroup(groupAvgs, outliers.length, []);
   const preFinal = assignOutliers(groups, outliers, targetGroups);
-  const avgs = calcGroupAvgs(preFinal);
 
+  const avgs = calcGroupAvgs(preFinal);
   const SD = standardDeviation(Object.values(avgs));
 
   if (SD > targetSD) {
@@ -151,11 +166,11 @@ export const assign = (current, studentRecords, groupsMap, numGroups) => {
 
 export const assignGroups = (fileHandler) => async (input, options) => {
   const { writeToTemp, paths, parser } = fileHandler(input);
-  const { localAbsolute, studentsWritePath, groupsWritePath } = paths;
   const { groupSize } = options;
 
+  const { localAbsolute, studentsWritePath, groupsWritePath } = paths;
+
   const parsed = await parser("bcsGroups")(localAbsolute);
-  console.log(cleanRecords(parsed));
 
   await writeToTemp(studentsWritePath, parsed);
   const groups = processRecords(cleanRecords(parsed), "avg", groupSize);
