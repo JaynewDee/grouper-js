@@ -60,7 +60,7 @@ export type ParserReturn =
 
 export const FileParser =
   (type: string, data: [] | StudentType[]) =>
-  (path: any): ParserReturn => {
+  (path: any): any => {
     switch (type) {
       case "formattedCsv":
         return convertFormattedCsvToJson(path);

@@ -1,17 +1,9 @@
-//@ts-nocheck
-
+import { FHType, Input, OptionsObject } from "../../lib/fs";
 import { StudentType } from "../../lib/models";
 
 const { round, floor, random, sqrt } = Math;
 
-type Records = any;
-
-interface UtilsObject {
-  sortDesc: (recs: Records, col: any) => Records;
-  getRandIdx: (arrLen: number) => number;
-  standardDeviation: (arr: number[], usePop: boolean) => number;
-  cleanRecords: (recs: Records) => Records;
-}
+import { Records, UtilsObject } from "./types.assign";
 
 export const utils: UtilsObject = {
   sortDesc: (recs, col) => recs.sort((a: any, b: any) => b[col] - a[col]),
@@ -33,15 +25,19 @@ export const utils: UtilsObject = {
 
 const { sortDesc, getRandIdx, standardDeviation, cleanRecords } = utils;
 
-export const partition = (sorted: StudentType[], remainder) => {
+export const partition = (sorted: StudentType[], remainder: number) => {
   const outliers = popOutliers(sorted, remainder);
-  const pruned = sorted.filter((student) =>
+  const pruned = sorted.filter((student: any) =>
     student in outliers ? false : true
   );
   return [outliers, pruned];
 };
 
-export const processRecords = (records, columnName, groupSize) => {
+export const processRecords = (
+  records: Records,
+  columnName: string,
+  groupSize: number
+) => {
   const numStudents = records.length;
   const numGroups = floor(numStudents / groupSize);
   const remainder = numStudents % groupSize;
@@ -51,13 +47,13 @@ export const processRecords = (records, columnName, groupSize) => {
 };
 
 export const balance = (
-  records,
-  columnName,
-  numGroups,
-  remainder,
+  records: Records,
+  columnName: string,
+  numGroups: number,
+  remainder: number,
   targetSD = 1,
   iterations = 0
-) => {
+): StudentType[] => {
   const copy = records.slice();
   const sorted = sortDesc(copy, columnName);
   const [outliers, pruned] = partition(sorted, remainder);
@@ -96,14 +92,22 @@ export const balance = (
   return preFinal;
 };
 
-export const assignOutliers = (groups, outliers, targets) => {
-  targets.forEach((groupNum, idx) => {
+export const assignOutliers = (
+  groups: any[],
+  outliers: any,
+  targets: StudentType[]
+) => {
+  targets.forEach((groupNum: any, idx: number) => {
     groups[groupNum]?.push(outliers[idx]);
   });
   return groups;
 };
 
-export const findTargetGroup = (avgs, numOutliers, targets) => {
+export const findTargetGroup = (
+  avgs: any[],
+  numOutliers: number,
+  targets: any
+): StudentType[] => {
   if (targets.length === numOutliers) return targets;
 
   const high = Object.values(avgs).reduce((a, b) => (a > b ? a : b));
@@ -115,7 +119,7 @@ export const findTargetGroup = (avgs, numOutliers, targets) => {
   return findTargetGroup(avgs, numOutliers, targets);
 };
 
-export const popOutliers = (sorted, remainder) => {
+export const popOutliers = (sorted: StudentType[], remainder: number) => {
   const outliers = [];
   let i = 0;
   while (i < remainder) {
@@ -125,19 +129,20 @@ export const popOutliers = (sorted, remainder) => {
   return outliers;
 };
 
-export const calcGroupAvgs = (groups) => {
+export const calcGroupAvgs = (groups: any) => {
   const groupAvgs = setupGroupsObject(Object.keys(groups).length);
   for (const group in groups) {
     const g = groups[group];
     groupAvgs[group] = round(
-      g.reduce((acc, obj) => (acc += obj["avg"]), 0) / g.length
+      g.reduce((acc: number, obj: StudentType) => (acc += obj["avg"]), 0) /
+        g.length
     );
   }
   return groupAvgs;
 };
 
-export const setupGroupsObject = (numGroups, type) => {
-  const groupsNumbered = {};
+export const setupGroupsObject = (numGroups: number, type?: string): any => {
+  const groupsNumbered: any = {};
   const fillValue = type === "array" ? [] : 0;
 
   let i = 1;
@@ -148,8 +153,13 @@ export const setupGroupsObject = (numGroups, type) => {
   return groupsNumbered;
 };
 
-export const assign = (current, studentRecords, groupsMap, numGroups) => {
-  if (!studentRecords.length) return groupsMap;
+export const assign = (
+  current: number,
+  studentRecords: any,
+  groupsMap: any,
+  numGroups: number
+): StudentType[] => {
+  if (!studentRecords?.length) return groupsMap;
   let currentGroup = current;
 
   const randomStudent = studentRecords[getRandIdx(studentRecords.length)];
@@ -160,21 +170,23 @@ export const assign = (current, studentRecords, groupsMap, numGroups) => {
   if (currentGroup === numGroups) currentGroup = 1;
   else currentGroup += 1;
 
-  const filteredRecords = studentRecords.filter((r) => r !== randomStudent);
+  const filteredRecords = studentRecords.filter(
+    (r: any) => r !== randomStudent
+  );
   return assign(currentGroup, filteredRecords, groupsMap, numGroups);
 };
 
-export const assignGroups = (fileHandler) => async (input, options) => {
-  const { writeToTemp, paths, parser } = fileHandler(input);
-  const { groupSize } = options;
+export const assignGroups =
+  (fileHandler: FHType) => async (input: Input, options: any) => {
+    const { writeToTemp, paths, parser } = fileHandler(input);
+    const { groupSize } = options;
+    const { localAbsolute, studentsWritePath, groupsWritePath } = paths;
 
-  const { localAbsolute, studentsWritePath, groupsWritePath } = paths;
+    const parsed: any = await parser("bcsGroups", [])(localAbsolute);
 
-  const parsed = await parser("bcsGroups")(localAbsolute);
+    await writeToTemp(studentsWritePath, parsed);
+    const groups = processRecords(cleanRecords(parsed), "avg", groupSize);
+    await writeToTemp(groupsWritePath, groups);
 
-  await writeToTemp(studentsWritePath, parsed);
-  const groups = processRecords(cleanRecords(parsed), "avg", groupSize);
-  await writeToTemp(groupsWritePath, groups);
-
-  Object.values(groups).forEach((g) => console.table(g));
-};
+    Object.values(groups).forEach((g) => console.table(g));
+  };

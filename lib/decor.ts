@@ -1,5 +1,8 @@
 import chalk from "chalk";
 import fig from "figures";
+import { cursorTo } from "readline";
+
+const { stdout } = process;
 
 const { red, yellow, green, blue, magenta, cyanBright } = chalk;
 const { lozengeOutline } = fig;
@@ -20,3 +23,30 @@ export const TitleDecor = (txt: string) =>
 
 export const ErrorDecor = (errorTxt: string) =>
   `${gem + gem + gem + Y(` ${errorTxt} `) + "\n" + gem + gem + gem}`;
+
+///////////////////////////////
+/// Terminal "Loading" Spinner
+///////////////////////////////
+const spinnerStates = ["-", "\\", "|", "/"];
+
+export const Spinner = (
+  index = 0,
+  states: string[] = spinnerStates,
+  interval: number,
+  isData: boolean
+) => {
+  process.stdout.write("\x1B[?25l");
+  setInterval(() => {
+    let char = states[index];
+    if (index === states.length) {
+      index = 0;
+      char = states[index];
+    }
+
+    stdout.write(char);
+
+    cursorTo(stdout, 0, 0);
+
+    index += 1;
+  }, interval);
+};

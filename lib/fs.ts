@@ -49,9 +49,10 @@ enum InputType {
   Object = "object"
 }
 
-type OptionsObject = {
+export type OptionsObject = {
   fileType?: string;
   collectionType?: string;
+  groupSize?: string;
 };
 
 export type Input = InputType | OptionsObject | string | any;
