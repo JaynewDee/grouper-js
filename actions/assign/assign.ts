@@ -5,7 +5,7 @@ import { StudentType } from "../../lib/models.js";
 import { exportHandler } from "../export.js";
 const { round, floor, random, sqrt } = Math;
 
-import { Records, UtilsObject } from "./assign.types.js";
+import { RecArray, UtilsObject, GroupsObject } from "./assign.types.js";
 
 export const utils: UtilsObject = {
   sortDesc: (recs, col) => recs.sort((a: any, b: any) => b[col] - a[col]),
@@ -28,7 +28,7 @@ export const utils: UtilsObject = {
 const { sortDesc, getRandIdx, standardDeviation, cleanRecords } = utils;
 
 export const balance = (
-  records: Records,
+  records: RecArray,
   columnName: string,
   numGroups: number,
   remainder: number,
@@ -82,7 +82,7 @@ export const partition = (sorted: StudentType[], remainder: number) => {
 };
 
 export const processRecords = (
-  records: Records,
+  records: RecArray,
   columnName: string,
   groupSize: number
 ) => {
@@ -106,9 +106,9 @@ export const assignOutliers = (
 };
 
 export const findTargetGroup = (
-  avgs: any[],
+  avgs: GroupsObject,
   numOutliers: number,
-  targets: any
+  targets: StudentType[]
 ): StudentType[] => {
   if (targets.length === numOutliers) return targets;
 
@@ -131,7 +131,7 @@ export const popOutliers = (sorted: StudentType[], remainder: number) => {
   return outliers;
 };
 
-export const calcGroupAvgs = (groups: any) => {
+export const calcGroupAvgs = (groups: GroupsObject) => {
   const groupAvgs = setupGroupsObject(Object.keys(groups).length);
   for (const group in groups) {
     const g = groups[group];
@@ -143,8 +143,11 @@ export const calcGroupAvgs = (groups: any) => {
   return groupAvgs;
 };
 
-export const setupGroupsObject = (numGroups: number, type?: string): any => {
-  const groupsNumbered: any = {};
+export const setupGroupsObject = (
+  numGroups: number,
+  type?: string
+): GroupsObject => {
+  const groupsNumbered: { [key: string]: StudentType[] | number } = {};
   const fillValue = type === "array" ? [] : 0;
 
   let i = 1;
@@ -157,8 +160,8 @@ export const setupGroupsObject = (numGroups: number, type?: string): any => {
 
 export const assign = (
   current: number,
-  studentRecords: any,
-  groupsMap: any,
+  studentRecords: StudentType[] | any,
+  groupsMap: GroupsObject | any,
   numGroups: number
 ): StudentType[] => {
   if (!studentRecords?.length) return groupsMap;
@@ -173,7 +176,7 @@ export const assign = (
   else currentGroup += 1;
 
   const filteredRecords = studentRecords.filter(
-    (r: any) => r !== randomStudent
+    (r: StudentType) => r !== randomStudent
   );
   return assign(currentGroup, filteredRecords, groupsMap, numGroups);
 };
@@ -195,7 +198,8 @@ const useDelivery = async (data: StudentType[]) => {
 };
 
 export const assignGroups =
-  (fileHandler: FHType) => async (input: Input, options: any) => {
+  (fileHandler: FHType) =>
+  async (input: Input, options: { [key: string]: number }) => {
     console.log(TitleDecor("CSV will be written to current path"));
     const { writeToTemp, paths, parser } = fileHandler(input);
     const { groupSize } = options;
