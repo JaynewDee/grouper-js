@@ -2,9 +2,9 @@ interface Answers {
   name: string;
   avg: number;
   group: boolean;
-  groupNum?: string;
-  fileExists?: boolean;
-  confirmClear?: boolean;
+  groupNum: string;
+  fileExists: boolean;
+  confirmClear: boolean;
 }
 
 const addStudent = [

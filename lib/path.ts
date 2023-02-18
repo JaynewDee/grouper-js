@@ -11,6 +11,7 @@ export interface PResolver {
   studentsWritePath: string;
   groupsWritePath: string;
 }
+
 export const PathResolver = (input: string | object): PResolver => ({
   ext: typeof input === "string" ? extname(input) : null,
   localAbsolute: `${process.cwd() + sep + input}`,

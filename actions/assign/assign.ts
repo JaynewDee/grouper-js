@@ -9,7 +9,7 @@ import { Records, UtilsObject } from "./assign.types.js";
 
 export const utils: UtilsObject = {
   sortDesc: (recs, col) => recs.sort((a: any, b: any) => b[col] - a[col]),
-  getRandIdx: (arrayLength) => floor(random() * arrayLength),
+  getRandIdx: (arrayLength: number) => floor(random() * arrayLength),
   standardDeviation: (arr, usePopulation = false) => {
     const mean: number = arr.reduce((acc, val) => acc + val, 0) / arr.length;
     return sqrt(
