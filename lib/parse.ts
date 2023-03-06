@@ -3,6 +3,7 @@ import { parse } from "json2csv";
 import { FileNotFound } from "./error.js";
 import { Student } from "./models.js";
 import { StudentType } from "./models.js";
+
 const { name, avg, group } = Object.freeze({
   name: new RegExp(/name|studentname/i),
   avg: new RegExp(/avg|average|gpa/i),

@@ -7,4 +7,5 @@ test*.csv
 /playwright/.cache/
 /tests-examples
 /build
+/lib/worker*
 *.csv

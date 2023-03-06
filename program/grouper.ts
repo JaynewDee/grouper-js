@@ -6,6 +6,8 @@ import { Command } from "commander";
 import { TitleDecor } from "../lib/decor.js";
 
 import { handlers } from "../actions/index.js";
+import { Input } from "../lib/fs.js";
+
 const [
   handleAddStudent,
   handleColorCode,
@@ -22,8 +24,18 @@ const program = new Command()
   .version("1.0.0")
   .description(TitleDecor(PROGRAM_NAME));
 
+type ActionHandler =
+  | ((
+      input: Input,
+      options: {
+        [key: string]: number;
+      }
+    ) => Promise<void>)
+  | ((input: string) => Promise<void>);
+
 const Cmnd =
-  (cmndName: string, description: string, action: any) => (program: Command) =>
+  (cmndName: string, description: string, action: ActionHandler) =>
+  (program: Command) =>
     program.command(cmndName).description(description).action(action);
 
 const [

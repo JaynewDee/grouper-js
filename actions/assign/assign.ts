@@ -3,11 +3,17 @@ import { TitleDecor } from "../../lib/decor.js";
 import { FHType, Input } from "../../lib/fs.js";
 import { StudentType } from "../../lib/models.js";
 import { exportHandler } from "../export.js";
-const { round, floor, random, sqrt } = Math;
 
 import { RecArray, UtilsObject, GroupsObject } from "./assign.types.js";
 
-export const utils: UtilsObject = {
+const { round, floor, random, sqrt } = Math;
+
+export const {
+  sortDesc,
+  getRandIdx,
+  standardDeviation,
+  cleanRecords
+}: UtilsObject = {
   sortDesc: (recs, col) => recs.sort((a: any, b: any) => b[col] - a[col]),
   getRandIdx: (arrayLength: number) => floor(random() * arrayLength),
   standardDeviation: (arr, usePopulation = false) => {
@@ -25,8 +31,6 @@ export const utils: UtilsObject = {
   cleanRecords: (records) => records.filter((rec: StudentType) => rec.avg !== 0)
 };
 
-const { sortDesc, getRandIdx, standardDeviation, cleanRecords } = utils;
-
 export const balance = (
   records: RecArray,
   columnName: string,
@@ -35,21 +39,22 @@ export const balance = (
   targetSD = 1,
   iterations = 0
 ): StudentType[] => {
-  const copy = records.slice();
-  const sorted = sortDesc(copy, columnName);
-  const [outliers, pruned] = partition(sorted, remainder);
+  const sorted = sortDesc([...records], columnName);
+  const [outliers, pruned] = partition([...sorted], remainder);
 
   const groupsMap = setupGroupsObject(numGroups, "array");
   const groups = assign(1, pruned, groupsMap, numGroups);
   const groupAvgs = calcGroupAvgs(groups);
+
   const targetGroups = findTargetGroup(groupAvgs, outliers.length, []);
+
   const preFinal = assignOutliers(groups, outliers, targetGroups);
 
   const avgs = calcGroupAvgs(preFinal);
   const SD = standardDeviation(Object.values(avgs));
 
   if (SD > targetSD) {
-    if (iterations < 500) {
+    if (iterations < 1000) {
       return balance(
         records,
         columnName,
@@ -78,6 +83,7 @@ export const partition = (sorted: StudentType[], remainder: number) => {
   const pruned = sorted.filter((student: any) =>
     student in outliers ? false : true
   );
+
   return [outliers, pruned];
 };
 
@@ -201,7 +207,10 @@ export const assignGroups =
   (fileHandler: FHType) =>
   async (input: Input, options: { [key: string]: number }) => {
     console.log(TitleDecor("CSV will be written to current path"));
+
     const { writeToTemp, paths, parser } = fileHandler(input);
+
+    console.time("write_and_group");
     const { groupSize } = options;
     const { localAbsolute, studentsWritePath, groupsWritePath } = paths;
 
@@ -210,6 +219,8 @@ export const assignGroups =
     await writeToTemp(studentsWritePath, parsed);
     const groups = processRecords(cleanRecords(parsed), "avg", groupSize);
     await writeToTemp(groupsWritePath, groups);
+
+    console.timeEnd("write_and_group");
 
     await useDelivery(groups);
     await exportHandler(fileHandler)({
