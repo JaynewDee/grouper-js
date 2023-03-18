@@ -8,12 +8,7 @@ import { RecArray, UtilsObject, GroupsObject } from "./assign.types.js";
 
 const { round, floor, random, sqrt } = Math;
 
-export const {
-  sortDesc,
-  getRandIdx,
-  standardDeviation,
-  cleanRecords
-}: UtilsObject = {
+export const utils: UtilsObject = {
   sortDesc: (recs, col) => recs.sort((a: any, b: any) => b[col] - a[col]),
   getRandIdx: (arrayLength: number) => floor(random() * arrayLength),
   standardDeviation: (arr, usePopulation = false) => {
@@ -39,7 +34,7 @@ export const balance = (
   targetSD = 1,
   iterations = 0
 ): StudentType[] => {
-  const sorted = sortDesc([...records], columnName);
+  const sorted = utils.sortDesc([...records], columnName);
   const [outliers, pruned] = partition([...sorted], remainder);
 
   const groupsMap = setupGroupsObject(numGroups, "array");
@@ -51,7 +46,7 @@ export const balance = (
   const preFinal = assignOutliers(groups, outliers, targetGroups);
 
   const avgs = calcGroupAvgs(preFinal);
-  const SD = standardDeviation(Object.values(avgs));
+  const SD = utils.standardDeviation(Object.values(avgs));
 
   if (SD > targetSD) {
     if (iterations < 1000) {
@@ -173,7 +168,7 @@ export const assign = (
   if (!studentRecords?.length) return groupsMap;
   let currentGroup = current;
 
-  const randomStudent = studentRecords[getRandIdx(studentRecords.length)];
+  const randomStudent = studentRecords[utils.getRandIdx(studentRecords.length)];
   const keyString = String(currentGroup);
   randomStudent.group = keyString;
   groupsMap[keyString] = [...groupsMap[keyString], randomStudent];
@@ -210,17 +205,14 @@ export const assignGroups =
 
     const { writeToTemp, paths, parser } = fileHandler(input);
 
-    console.time("write_and_group");
     const { groupSize } = options;
     const { localAbsolute, studentsWritePath, groupsWritePath } = paths;
 
     const parsed: any = await parser("bcsGroups", [])(localAbsolute);
 
     await writeToTemp(studentsWritePath, parsed);
-    const groups = processRecords(cleanRecords(parsed), "avg", groupSize);
+    const groups = processRecords(utils.cleanRecords(parsed), "avg", groupSize);
     await writeToTemp(groupsWritePath, groups);
-
-    console.timeEnd("write_and_group");
 
     await useDelivery(groups);
     await exportHandler(fileHandler)({
