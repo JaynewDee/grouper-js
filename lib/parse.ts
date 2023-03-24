@@ -52,7 +52,7 @@ const bcsToUsable = async (path: string) =>
       );
   });
 
-export type ParserData = StudentType[] | [] | any;
+export type ParserData = StudentType[] | [];
 export type ParserReturn =
   | Promise<StudentType[]>
   | Promise<void | {}[]>

@@ -70,6 +70,7 @@ export const balance = (
       );
     }
   }
+  console.log(`Standard Deviation: ${SD.toFixed(2)}`);
   return preFinal;
 };
 
@@ -200,18 +201,17 @@ const useDelivery = async (data: StudentType[]) => {
 
 export const assignGroups =
   (fileHandler: FHType) =>
-  async (input: Input, options: { [key: string]: number }) => {
+  async (input: Input, options: { [key: string]: string }) => {
     console.log(TitleDecor("CSV will be written to current path"));
 
     const { writeToTemp, paths, parser } = fileHandler(input);
 
-    const { groupSize } = options;
     const { localAbsolute, studentsWritePath, groupsWritePath } = paths;
 
     const parsed: any = await parser("bcsGroups", [])(localAbsolute);
 
     await writeToTemp(studentsWritePath, parsed);
-    const groups = processRecords(utils.cleanRecords(parsed), "avg", groupSize);
+    const groups = processRecords(utils.cleanRecords(parsed), "avg", 7);
     await writeToTemp(groupsWritePath, groups);
 
     await useDelivery(groups);

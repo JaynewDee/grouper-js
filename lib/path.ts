@@ -3,10 +3,8 @@
 import { tmpdir } from "os";
 import { sep, extname } from "path";
 
-type Extension = string | null;
-
 export interface PResolver {
-  ext: Extension;
+  ext: string | null;
   localAbsolute: string;
   studentsWritePath: string;
   groupsWritePath: string;

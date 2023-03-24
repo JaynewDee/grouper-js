@@ -59,7 +59,6 @@ const sorted = sortDesc(parsed.slice(), "avg");
 describe("sortDesc utility function", () => {
   it("should return sorted results", () => {
     expect(sorted[0].avg > sorted[sorted.length - 1].avg).to.be.true;
-    expect(sorted[sorted.length].avg - 1 < sorted[sorted.length].avg - 2);
   });
 });
 

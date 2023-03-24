@@ -2,7 +2,6 @@ import { FileHandler } from "../lib/fs.js";
 import { PathResolver } from "../lib/path.js";
 import { should } from "chai";
 should();
-// expect();
 
 describe("File system module factory", () => {
   it("should return entity of appropriate shape", () => {
