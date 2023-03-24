@@ -206,12 +206,14 @@ export const assignGroups =
 
     const { writeToTemp, paths, parser } = fileHandler(input);
 
+    console.log(input);
+    console.log(options);
     const { localAbsolute, studentsWritePath, groupsWritePath } = paths;
 
     const parsed: any = await parser("bcsGroups", [])(localAbsolute);
 
     await writeToTemp(studentsWritePath, parsed);
-    const groups = processRecords(utils.cleanRecords(parsed), "avg", 7);
+    const groups = processRecords(utils.cleanRecords(parsed), "avg", 5);
     await writeToTemp(groupsWritePath, groups);
 
     await useDelivery(groups);

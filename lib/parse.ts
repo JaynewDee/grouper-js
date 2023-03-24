@@ -43,6 +43,7 @@ const bcsToUsable = async (path: string) =>
     if (!messy.length) {
       throw FileNotFound();
     }
+
     return messy
       .map((val) =>
         Student(val["Student"], parseFloat(val["Current Score"]), "0")
@@ -53,6 +54,7 @@ const bcsToUsable = async (path: string) =>
   });
 
 export type ParserData = StudentType[] | [];
+
 export type ParserReturn =
   | Promise<StudentType[]>
   | Promise<void | {}[]>
@@ -60,8 +62,8 @@ export type ParserReturn =
   | string;
 
 export const FileParser =
-  (type: string, data: [] | StudentType[]) =>
-  (path: any): any => {
+  (type: string, data: any) =>
+  (path: string): any => {
     switch (type) {
       case "formattedCsv":
         return convertFormattedCsvToJson(path);

@@ -5,10 +5,7 @@
 import { Command } from "commander";
 import { TitleDecor } from "../lib/decor.js";
 
-import { handlers } from "../actions/index.js";
-import { Input } from "../lib/fs.js";
-
-const [handleAssign] = handlers;
+import { handler as assignHandler } from "../actions/index.js";
 
 const PROGRAM_NAME = "GROUPER";
 
@@ -18,14 +15,15 @@ const program = new Command()
   .description(TitleDecor(PROGRAM_NAME));
 
 program
-  .command("assign <path>")
+  .command("assign")
+  .argument("<path>")
   .description(
     "Parse file -> Write students to collections -> Create and assign groups -> Write groups to collections -> Export groups as CSV"
   )
-  .action(handleAssign)
   .option(
-    "-s|--group-size <size>",
+    "-s, --group-size <size>",
     "Target number of students per group | default: 5"
-  );
+  )
+  .action(assignHandler);
 
 export default program;
