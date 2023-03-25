@@ -49,7 +49,7 @@ export const balance = (
   const SD = utils.standardDeviation(Object.values(avgs));
 
   if (SD > targetSD) {
-    if (iterations < 1000) {
+    if (iterations < 500) {
       return balance(
         records,
         columnName,
@@ -211,7 +211,6 @@ export const assignGroups =
 
     const { writeToTemp, paths, parser, clearStorage } = fileHandler(input);
 
-    console.log(options);
     const gs = parseInt(options.groupSize);
     const { localAbsolute, studentsWritePath, groupsWritePath } = paths;
 
