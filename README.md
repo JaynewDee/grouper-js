@@ -17,6 +17,7 @@
 it does not require any programming ability to use. The only requirement is that the user have access to  
 NPM/Node from within a terminal.
 
+
 - Install the project as a global npm package:
   > - `npm i -g group-maker`
   > - close all terminals
