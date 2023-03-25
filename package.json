@@ -1,6 +1,6 @@
 {
   "name": "grouperjs",
-  "version": "1.1.81",
+  "version": "1.2.00",
   "description": "",
   "main": "main.js",
   "type": "module",
@@ -9,7 +9,11 @@
     "build": "tsc",
     "main": "ts-node-esm ./main.ts"
   },
-  "keywords": [],
+  "keywords": [
+    "cli",
+    "commander",
+    "typescript"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {

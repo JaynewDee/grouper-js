@@ -1,20 +1,11 @@
-/**
- * Test //actions// module
- */
 import { should, expect } from "chai";
 const { floor } = Math;
 should();
-// expect();
 
-// * Test assign.js - assign students action / command
 import {
   utils,
   partition,
-  processRecords,
-  assignOutliers,
-  findTargetGroup,
   popOutliers,
-  calcGroupAvgs,
   setupGroupsObject,
   assign
 } from "../../actions/assign/assign.js";
@@ -109,7 +100,7 @@ describe("assign function", () => {
   const numGroups = floor(numStudents / 4);
   const remainder = numStudents % 4;
   const sorted = sortDesc(parsed, "avg");
-  const [outliers, pruned] = partition(sorted, remainder);
+  const [_, pruned] = partition(sorted, remainder);
   const groupsMap = setupGroupsObject(numGroups, "array");
   const groups = assign(1, pruned, groupsMap, numGroups);
 
@@ -117,19 +108,3 @@ describe("assign function", () => {
     expect(Object.keys(groups).length).to.equal(numGroups);
   });
 });
-
-describe("calcGroupAvgs function", () => {
-  const numStudents = parsed.length;
-  const numGroups = floor(numStudents / 4);
-  const remainder = numStudents % 4;
-  const sorted = sortDesc(parsed, "avg");
-  const [outliers, pruned] = partition(sorted, remainder);
-  const groupsMap = setupGroupsObject(numGroups, "array");
-  const groups = assign(1, pruned, groupsMap, numGroups);
-
-  const groupAvgs = calcGroupAvgs(groups);
-});
-
-describe("findTargetGroup function", () => {});
-
-describe("findTargetGroup function", () => {});
