@@ -99,8 +99,9 @@ export const processRecords = (
 export const assignOutliers = (
   groups: any[],
   outliers: any,
-  targets: StudentType[]
+  targets: string[]
 ) => {
+  console.log(targets);
   targets.forEach((groupNum: any, idx: number) => {
     groups[groupNum]?.push(outliers[idx]);
   });
@@ -110,15 +111,18 @@ export const assignOutliers = (
 export const findTargetGroup = (
   avgs: GroupsObject,
   numOutliers: number,
-  targets: StudentType[]
-): StudentType[] => {
+  targets: string[]
+): string[] => {
   if (targets.length === numOutliers) return targets;
-
   const high = Object.values(avgs).reduce((a, b) => (a > b ? a : b));
 
-  targets.push(high);
-
-  if (high in avgs) delete avgs[high[0]];
+  for (const group in avgs) {
+    if (avgs[group] === high) {
+      targets.push(group);
+      delete avgs[group];
+      break;
+    }
+  }
 
   return findTargetGroup(avgs, numOutliers, targets);
 };
@@ -206,14 +210,14 @@ export const assignGroups =
 
     const { writeToTemp, paths, parser } = fileHandler(input);
 
-    console.log(input);
     console.log(options);
+    const gs = parseInt(options.groupSize);
     const { localAbsolute, studentsWritePath, groupsWritePath } = paths;
 
     const parsed: any = await parser("bcsGroups", [])(localAbsolute);
 
     await writeToTemp(studentsWritePath, parsed);
-    const groups = processRecords(utils.cleanRecords(parsed), "avg", 5);
+    const groups = processRecords(utils.cleanRecords(parsed), "avg", gs);
     await writeToTemp(groupsWritePath, groups);
 
     await useDelivery(groups);

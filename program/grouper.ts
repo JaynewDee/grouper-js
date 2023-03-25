@@ -22,7 +22,8 @@ program
   )
   .option(
     "-s, --group-size <size>",
-    "Target number of students per group | default: 5"
+    "Target number of students per group | default: 5",
+    "5"
   )
   .action(assignHandler);
 
