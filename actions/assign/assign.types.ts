@@ -10,5 +10,5 @@ export interface UtilsObject {
 }
 
 export type GroupsObject = {
-  [key: string]: string | number | symbol | any;
+  [key: string]: string | number | any;
 };

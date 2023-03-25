@@ -9,7 +9,9 @@
 > - To make classroom grouping decisions
 >   as fast, simple, and equitable as possible.
 
-## INSTALLATION
+---
+
+## Getting started
 
 **Note!**: Though this project is written in JavaScript and distributed as an NPM package,  
 it does not require any programming ability to use. The only requirement is that the user have access  
@@ -20,8 +22,10 @@ to NPM/Node from within a terminal.
   > - close all terminals
   > - run `grouper` at the terminal to verify installation
 
+---
+
 ## BASIC USAGE
 
-| Command         | Description                                                                                            | Options                            |
-| --------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------------- |
-| `assign <path>` | Parse file -> Write students to collections -> Create and assign groups -> Write groups to collections | `path` Path to BootCampSpot export |
+| Command                                             | Description                                                | Options                       |
+| --------------------------------------------------- | ---------------------------------------------------------- | ----------------------------- |
+| `assign <path>` relative path to bcs gradebook file | Parse file -> Create Groups -> Output group results as csv | `-s <size>` target group size |

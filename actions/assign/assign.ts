@@ -101,8 +101,8 @@ export const assignOutliers = (
   outliers: any,
   targets: string[]
 ) => {
-  console.log(targets);
   targets.forEach((groupNum: any, idx: number) => {
+    outliers[idx].group = groupNum;
     groups[groupNum]?.push(outliers[idx]);
   });
   return groups;
@@ -184,6 +184,7 @@ export const assign = (
   const filteredRecords = studentRecords.filter(
     (r: StudentType) => r !== randomStudent
   );
+
   return assign(currentGroup, filteredRecords, groupsMap, numGroups);
 };
 
@@ -208,7 +209,7 @@ export const assignGroups =
   async (input: Input, options: { [key: string]: string }) => {
     console.log(TitleDecor("CSV will be written to current path"));
 
-    const { writeToTemp, paths, parser } = fileHandler(input);
+    const { writeToTemp, paths, parser, clearStorage } = fileHandler(input);
 
     console.log(options);
     const gs = parseInt(options.groupSize);
@@ -225,4 +226,5 @@ export const assignGroups =
       fileType: ".csv",
       collectionType: "groups"
     });
+    clearStorage(groupsWritePath);
   };
