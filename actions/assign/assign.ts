@@ -226,5 +226,6 @@ export const assignGroups =
       fileType: ".csv",
       collectionType: "groups"
     });
+
     clearStorage(groupsWritePath);
   };
