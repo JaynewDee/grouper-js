@@ -1,23 +1,14 @@
-/**
- * Test //actions// module
- */
 import { should, expect } from "chai";
 const { floor } = Math;
 should();
-// expect();
 
-// * Test assign.js - assign students action / command
 import {
   utils,
   partition,
-  processRecords,
-  assignOutliers,
-  findTargetGroup,
   popOutliers,
-  calcGroupAvgs,
   setupGroupsObject,
   assign
-} from "../../actions/assign.js";
+} from "../../actions/assign/assign.js";
 
 const { sortDesc } = utils;
 
@@ -56,22 +47,22 @@ const parsed = [
 ];
 
 const sorted = sortDesc(parsed.slice(), "avg");
+
 describe("sortDesc utility function", () => {
   it("should return sorted results", () => {
     expect(sorted[0].avg > sorted[sorted.length - 1].avg).to.be.true;
-    expect(sorted[sorted.length] - 1 < sorted[sorted.length] - 2);
   });
 });
 
 describe("popOutliers function", () => {
-  const outliers = popOutliers(sorted, 1);
+  const outliers: any[] = popOutliers(sorted, 1);
   expect(outliers.length).to.equal(1);
   const { name } = outliers[0];
   expect(name).to.equal("Cruz, Francisco");
 });
 
 describe("partition function", () => {
-  const results = partition(sorted, 1);
+  const results: any[][] = partition(sorted, 1);
 
   it("should return tuple / array pair", () => {
     results.length.should.equal(2);
@@ -85,7 +76,7 @@ describe("partition function", () => {
 describe("setupGroubsObject function", () => {
   it("should return array when array-type passed", () => {
     const numberedGroups = setupGroupsObject(10, "array");
-    Object.values(numberedGroups).forEach((val) => {
+    Object.values(numberedGroups).forEach((val: any) => {
       expect(typeof val === "object").to.be.true;
       expect(val.length).to.equal(0);
     });
@@ -109,7 +100,7 @@ describe("assign function", () => {
   const numGroups = floor(numStudents / 4);
   const remainder = numStudents % 4;
   const sorted = sortDesc(parsed, "avg");
-  const [outliers, pruned] = partition(sorted, remainder);
+  const [_, pruned] = partition(sorted, remainder);
   const groupsMap = setupGroupsObject(numGroups, "array");
   const groups = assign(1, pruned, groupsMap, numGroups);
 
@@ -117,19 +108,3 @@ describe("assign function", () => {
     expect(Object.keys(groups).length).to.equal(numGroups);
   });
 });
-
-describe("calcGroupAvgs function", () => {
-  const numStudents = parsed.length;
-  const numGroups = floor(numStudents / 4);
-  const remainder = numStudents % 4;
-  const sorted = sortDesc(parsed, "avg");
-  const [outliers, pruned] = partition(sorted, remainder);
-  const groupsMap = setupGroupsObject(numGroups, "array");
-  const groups = assign(1, pruned, groupsMap, numGroups);
-
-  const groupAvgs = calcGroupAvgs(groups);
-});
-
-describe("findTargetGroup function", () => {});
-
-describe("findTargetGroup function", () => {});

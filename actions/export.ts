@@ -1,5 +1,4 @@
 import { FHType, Input } from "../lib/fs";
-import { ParserData } from "../lib/parse";
 
 export const exportHandler = (fileHandler: FHType) => async (input: Input) => {
   const { parser, readFlowJson, exportAsCsv, paths } = fileHandler();
@@ -22,7 +21,7 @@ export const exportHandler = (fileHandler: FHType) => async (input: Input) => {
     try {
       const fromBuffer: string = readFlowJson(groupsWritePath).toString();
       const tempData = JSON.parse(fromBuffer);
-      const classArr: ParserData = Object.values(tempData).reduce(
+      const classArr: any = Object.values(tempData).reduce(
         (acc: any[], val: any) => [...acc, ...val],
         []
       );

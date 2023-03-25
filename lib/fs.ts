@@ -44,17 +44,13 @@ export interface FHShape {
   exportAsCsv: (filename: string, data: any) => Promise<void>;
 }
 
-enum InputType {
-  String = "string",
-  Object = "object"
-}
-
-type OptionsObject = {
+export type OptionsObject = {
   fileType?: string;
   collectionType?: string;
+  groupSize?: string;
 };
 
-export type Input = InputType | OptionsObject | string | any;
+export type Input = OptionsObject | string | any;
 
 export type FHType = (input?: Input) => FHShape;
 

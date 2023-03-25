@@ -5,7 +5,9 @@
     "main.ts",
     "./*/*.ts",
     "actions/assign/assign.ts",
-    "actions/assign/assign.ts"
+    "actions/assign/assign.ts",
+    "actions/assign/assign.types.ts",
+    "actions/assign/assign.types.ts"
   ],
   "exclude": ["node_modules", "test/*"],
   "compilerOptions": {
