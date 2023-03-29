@@ -8,4 +8,5 @@ test*.csv
 /tests-examples
 /build
 /lib/worker*
+/lib/pool.ts
 *.csv

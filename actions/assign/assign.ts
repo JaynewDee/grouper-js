@@ -91,6 +91,8 @@ export const processRecords = (
   const numStudents = records.length;
   const numGroups = floor(numStudents / groupSize);
   const remainder = numStudents % groupSize;
+
+  // RECURSE
   const finalized = balance(records, columnName, numGroups, remainder);
 
   return finalized;
@@ -116,6 +118,7 @@ export const findTargetGroup = (
   if (targets.length === numOutliers) return targets;
   const high = Object.values(avgs).reduce((a, b) => (a > b ? a : b));
 
+  // Could be optimized from O(n) to O(1) with appropriately formatted lookup table
   for (const group in avgs) {
     if (avgs[group] === high) {
       targets.push(group);
@@ -123,7 +126,7 @@ export const findTargetGroup = (
       break;
     }
   }
-
+  // RECURSE
   return findTargetGroup(avgs, numOutliers, targets);
 };
 
@@ -185,6 +188,7 @@ export const assign = (
     (r: StudentType) => r !== randomStudent
   );
 
+  // RECURSE
   return assign(currentGroup, filteredRecords, groupsMap, numGroups);
 };
 
