@@ -13,7 +13,7 @@ export class BalancerPool {
   script: string;
   static instantiations: number = 0;
 
-  constructor(size: number) {
+  constructor(size: number, func: () => void) {
     this.script = `${__dirname}/worker.js`;
     this.size = size;
     this.workers = new Deque();
@@ -22,14 +22,22 @@ export class BalancerPool {
 
   private makeOne = () => {
     const worker = new Worker(this.script);
-    worker.on("message", (msg) => {
+    const handleMessage = (msg: any) => {
+      console.dir(msg);
       console.log(`Received data message: ${msg}`);
-    });
-    worker.on("error", (err) => {
+    };
+    worker.on("message", handleMessage);
+    const handleError = (err: Error) => {
       console.log(`Worker error: ${err}`);
-    });
+    };
+    worker.on("error", handleError);
     worker.on("exit", () => {
-      console.log(`Worker finished and available.`);
+      console.log("WORKER EXIT");
+      if (!this.jobQueue.isEmpty()) {
+        worker.postMessage(this.jobQueue.popFront());
+      } else {
+        this.workers.pushBack(worker);
+      }
     });
     return worker;
   };
@@ -62,7 +70,7 @@ export class BalancerPool {
       const worker = this.workers.popFront() as Worker;
       // If no jobs waiting
       if (this.jobQueue.isEmpty()) {
-        console.log("Job Queue Empty");
+        // console.log("Job Queue Empty");
         worker.postMessage(jobData);
       } else {
         console.log("Getting Job from Queue");
@@ -70,6 +78,7 @@ export class BalancerPool {
       }
     } else {
       // Handle case of no workers available
+      this.queueJob(jobData);
       console.log("No workers available");
     }
   }
