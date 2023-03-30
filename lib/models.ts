@@ -14,7 +14,7 @@ export const Student = (
   group: String(group)
 });
 
-export class JobDeque<T> {
+export class Deque<T> {
   private head: DequeNode<T> | null;
   private tail: DequeNode<T> | null;
   private length: number;

@@ -2,6 +2,7 @@ import ora from "ora";
 import { TitleDecor } from "../../lib/decor.js";
 import { FHType, Input } from "../../lib/fs.js";
 import { StudentType } from "../../lib/models.js";
+import { workerPool } from "./pool.js";
 import { exportHandler } from "../export.js";
 
 import { RecArray, UtilsObject, GroupsObject } from "./assign.types.js";
@@ -46,6 +47,9 @@ export const balance = (
   const preFinal = assignOutliers(groups, outliers, targetGroups);
 
   const avgs = calcGroupAvgs(preFinal);
+
+  workerPool.executeJob(avgs);
+
   const SD = utils.standardDeviation(Object.values(avgs));
 
   if (SD > targetSD) {
