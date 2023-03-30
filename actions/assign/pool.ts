@@ -11,9 +11,9 @@ export class BalancerPool {
   workers: Deque<Worker>;
   jobQueue: Deque<any>;
   script: string;
-  static instantiations: number = 0;
+  static instances: number = 0;
 
-  constructor(size: number, func: () => void) {
+  constructor(size: number) {
     this.script = `${__dirname}/worker.js`;
     this.size = size;
     this.workers = new Deque();
@@ -27,17 +27,13 @@ export class BalancerPool {
       console.log(`Received data message: ${msg}`);
     };
     worker.on("message", handleMessage);
+    worker.on("message", handleMessage);
     const handleError = (err: Error) => {
       console.log(`Worker error: ${err}`);
     };
     worker.on("error", handleError);
     worker.on("exit", () => {
-      console.log("WORKER EXIT");
-      if (!this.jobQueue.isEmpty()) {
-        worker.postMessage(this.jobQueue.popFront());
-      } else {
-        this.workers.pushBack(worker);
-      }
+      this.workers.pushBack(worker);
     });
     return worker;
   };
@@ -49,12 +45,12 @@ export class BalancerPool {
   }
 
   private initialize() {
-    if (BalancerPool.instantiations > 0)
+    if (BalancerPool.instances > 0)
       return new Error(`BalancerPool is enforced as a singleton.`);
 
     this.fill();
 
-    BalancerPool.instantiations++;
+    BalancerPool.instances++;
   }
 
   queueJob(data: JobData) {
@@ -62,12 +58,13 @@ export class BalancerPool {
   }
 
   executeJob(jobData: JobData) {
-    if (BalancerPool.instantiations === 0) {
+    if (BalancerPool.instances === 0) {
       this.initialize();
     }
     // If free workers,
     if (!this.workers.isEmpty()) {
       const worker = this.workers.popFront() as Worker;
+      console.log(this.workers.size());
       // If no jobs waiting
       if (this.jobQueue.isEmpty()) {
         // console.log("Job Queue Empty");
@@ -84,7 +81,7 @@ export class BalancerPool {
   }
 
   reset() {
-    BalancerPool.instantiations--;
+    BalancerPool.instances--;
     this.initialize();
   }
 }

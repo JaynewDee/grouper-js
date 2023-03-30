@@ -2,7 +2,7 @@ import ora from "ora";
 import { TitleDecor } from "../../lib/decor.js";
 import { FHType, Input } from "../../lib/fs.js";
 import { StudentType } from "../../lib/models.js";
-import { workerPool } from "./pool.js";
+import { BalancerPool } from "./pool.js";
 import { exportHandler } from "../export.js";
 
 import { RecArray, UtilsObject, GroupsObject } from "./assign.types.js";
@@ -48,7 +48,8 @@ export const balance = (
 
   const avgs = calcGroupAvgs(preFinal);
 
-  workerPool.executeJob(avgs);
+  const workerPool = new BalancerPool(4);
+  workerPool.executeJob({});
 
   const SD = utils.standardDeviation(Object.values(avgs));
 
