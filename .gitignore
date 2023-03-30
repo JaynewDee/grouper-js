@@ -7,6 +7,6 @@ test*.csv
 /playwright/.cache/
 /tests-examples
 /build
-/lib/worker*
-/lib/pool.ts
+/actions/assign/pool.ts
+/actions/assign/worker.ts
 *.csv
