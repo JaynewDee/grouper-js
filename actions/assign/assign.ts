@@ -112,6 +112,7 @@ export function assignOutliers(
     outliers[idx].group = groupNum;
     groups[groupNum]?.push(outliers[idx]);
   });
+
   return groups;
 }
 
@@ -191,13 +192,21 @@ const useDelivery = async (data: StudentType[]) => {
 export const assignGroups =
   (fileHandler: FHType) =>
   async (input: Input, options: { [key: string]: string }) => {
+    const gs = parseInt(options.groupSize);
+
+    if (gs < 2) {
+      console.log(
+        TitleDecor("There's no I in team!\nGroup size must be at least 2.")
+      );
+      return process.exit(1);
+    }
+
     console.log(
       TitleDecor("CSV will be written to current path @ `groups.csv`")
     );
 
     const { writeToTemp, paths, parser, clearStorage } = fileHandler(input);
 
-    const gs = parseInt(options.groupSize);
     const { localAbsolute, studentsWritePath, groupsWritePath } = paths;
 
     const parsed: any = await parser("bcsGroups", [])(localAbsolute);

@@ -13,7 +13,7 @@ export const C = (strText: Txt) => cyanBright(strText);
 const gem: string = P(lozengeOutline);
 
 export const TitleDecor = (txt: string) =>
-  `${gem + gem + gem + C(` ${txt} `) + gem + gem + gem}`;
+  `${gem + gem + gem + C(`  ${txt} `) + gem + gem + gem}`;
 
 export const ErrorDecor = (errorTxt: string) =>
   `${gem + gem + gem + Y(` ${errorTxt} `) + "\n" + gem + gem + gem}`;
