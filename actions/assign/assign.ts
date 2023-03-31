@@ -26,96 +26,104 @@ export const utils: UtilsObject = {
   cleanRecords: (records) => records.filter((rec: StudentType) => rec.avg !== 0)
 };
 
-export const balance = (
+export function processRecords(
   records: RecArray,
   columnName: string,
-  numGroups: number,
-  remainder: number,
-  targetSD = 1,
-  iterations = 0
-): StudentType[] => {
+  groupSize: number
+) {
+  const numStudents = records.length;
+  const numGroups = floor(numStudents / groupSize);
+  const remainder = numStudents % groupSize;
+
   const sorted = utils.sortDesc([...records], columnName);
-  const [outliers, pruned] = partition([...sorted], remainder);
+  const [outliers, pruned] = partition(sorted, remainder);
 
-  const groupsMap = setupGroupsObject(numGroups, "array");
-  const groups = assign(1, pruned, groupsMap, numGroups);
-  const groupAvgs = calcGroupAvgs(groups);
+  //
 
-  const targetGroups = findTargetGroup(groupAvgs, outliers.length, []);
+  let targetSD = 1;
+  let iterations = 0;
 
-  const preFinal = assignOutliers(groups, outliers, targetGroups);
+  let groupsMap = setupGroupsObject(numGroups, "array");
+  let groups = assign(1, pruned, groupsMap, numGroups);
+  let groupAvgs = calcGroupAvgs(groups);
+  let targetGroups = findTargetGroup(groupAvgs, outliers.length, []);
+  let final = assignOutliers(groups, outliers, targetGroups);
+  let avgs = calcGroupAvgs(final);
+  let SD = utils.standardDeviation(Object.values(avgs));
 
-  const avgs = calcGroupAvgs(preFinal);
-  const SD = utils.standardDeviation(Object.values(avgs));
-
-  if (SD > targetSD) {
-    if (iterations < 1000) {
-      return balance(
-        records,
-        columnName,
-        numGroups,
-        remainder,
-        targetSD,
-        iterations + 1
-      );
-    } else {
+  while (SD > targetSD) {
+    groupsMap = setupGroupsObject(numGroups, "array");
+    groups = assign(1, pruned, groupsMap, numGroups);
+    groupAvgs = calcGroupAvgs(groups);
+    targetGroups = findTargetGroup(groupAvgs, outliers.length, []);
+    final = assignOutliers(groups, outliers, targetGroups);
+    avgs = calcGroupAvgs(final);
+    SD = utils.standardDeviation(Object.values(avgs));
+    if (iterations === 50000) {
       iterations = 0;
-      return balance(
-        records,
-        columnName,
-        numGroups,
-        remainder,
-        targetSD + 1,
-        iterations
-      );
+      targetSD++;
     }
+    iterations++;
   }
-  console.log(`Standard Deviation: ${SD.toFixed(2)}`);
-  return preFinal;
-};
 
-export const partition = (sorted: StudentType[], remainder: number) => {
+  console.log(`Standard Deviation ::: ${SD.toFixed(3)}`);
+  return final;
+}
+
+export function assign(
+  current: number,
+  studentRecords: StudentType[] | any,
+  groupsMap: GroupsObject | any,
+  numGroups: number
+): StudentType[] {
+  if (!studentRecords.length) return groupsMap;
+  let currentGroup = current;
+
+  const randomStudent = studentRecords[utils.getRandIdx(studentRecords.length)];
+  const keyString = String(currentGroup);
+  randomStudent.group = keyString;
+  groupsMap[keyString] = [...groupsMap[keyString], randomStudent];
+
+  if (currentGroup === numGroups) currentGroup = 1;
+  else currentGroup += 1;
+
+  const filteredRecords = studentRecords.filter(
+    (r: StudentType) => r !== randomStudent
+  );
+
+  return assign(currentGroup, filteredRecords, groupsMap, numGroups);
+}
+
+export function partition(sorted: StudentType[], remainder: number) {
   const outliers = popOutliers(sorted, remainder);
   const pruned = sorted.filter((student: any) =>
     student in outliers ? false : true
   );
 
   return [outliers, pruned];
-};
+}
 
-export const processRecords = (
-  records: RecArray,
-  columnName: string,
-  groupSize: number
-) => {
-  const numStudents = records.length;
-  const numGroups = floor(numStudents / groupSize);
-  const remainder = numStudents % groupSize;
-  const finalized = balance(records, columnName, numGroups, remainder);
-
-  return finalized;
-};
-
-export const assignOutliers = (
+export function assignOutliers(
   groups: any[],
   outliers: any,
   targets: string[]
-) => {
+) {
   targets.forEach((groupNum: any, idx: number) => {
     outliers[idx].group = groupNum;
     groups[groupNum]?.push(outliers[idx]);
   });
   return groups;
-};
+}
 
-export const findTargetGroup = (
+export function findTargetGroup(
   avgs: GroupsObject,
   numOutliers: number,
   targets: string[]
-): string[] => {
+): string[] {
   if (targets.length === numOutliers) return targets;
   const high = Object.values(avgs).reduce((a, b) => (a > b ? a : b));
 
+  // Could be optimized from O(n) to O(1) with appropriately formatted lookup table
   for (const group in avgs) {
     if (avgs[group] === high) {
       targets.push(group);
@@ -125,7 +133,7 @@ export const findTargetGroup = (
   }
 
   return findTargetGroup(avgs, numOutliers, targets);
-};
+}
 
 export const popOutliers = (sorted: StudentType[], remainder: number) => {
   const outliers = [];
@@ -164,30 +172,6 @@ export const setupGroupsObject = (
   return groupsNumbered;
 };
 
-export const assign = (
-  current: number,
-  studentRecords: StudentType[] | any,
-  groupsMap: GroupsObject | any,
-  numGroups: number
-): StudentType[] => {
-  if (!studentRecords?.length) return groupsMap;
-  let currentGroup = current;
-
-  const randomStudent = studentRecords[utils.getRandIdx(studentRecords.length)];
-  const keyString = String(currentGroup);
-  randomStudent.group = keyString;
-  groupsMap[keyString] = [...groupsMap[keyString], randomStudent];
-
-  if (currentGroup === numGroups) currentGroup = 1;
-  else currentGroup += 1;
-
-  const filteredRecords = studentRecords.filter(
-    (r: StudentType) => r !== randomStudent
-  );
-
-  return assign(currentGroup, filteredRecords, groupsMap, numGroups);
-};
-
 const useDelivery = async (data: StudentType[]) => {
   const spinner = ora("Processing").start();
 
@@ -211,7 +195,6 @@ export const assignGroups =
 
     const { writeToTemp, paths, parser, clearStorage } = fileHandler(input);
 
-    console.log(options);
     const gs = parseInt(options.groupSize);
     const { localAbsolute, studentsWritePath, groupsWritePath } = paths;
 
