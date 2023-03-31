@@ -131,7 +131,7 @@ export function findTargetGroup(
       break;
     }
   }
-  // RECURSE
+
   return findTargetGroup(avgs, numOutliers, targets);
 }
 

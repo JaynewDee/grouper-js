@@ -26,13 +26,9 @@ const exportAsCsv = async (filename: string, csvdata: any) =>
  * @param {any} input
  * @property {object} paths
  * @property {Function} readFlowJson pipe file into readable json
- * @property {Function} convertFormattedCsvToJson convert csv to json
  * @property {Function} clearStorage empty user-specified collection
  * @property {Function} writeToTemp write data to temp file
- * @property {Function} convertJsonToCsv convert json to csv
- * @property {Function} convertGroupsJsonToCsv
  * @property {Function} exportAsCsv
- * @property {Function} asyncTryCatch
  */
 
 export interface FHShape {
