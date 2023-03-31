@@ -191,7 +191,9 @@ const useDelivery = async (data: StudentType[]) => {
 export const assignGroups =
   (fileHandler: FHType) =>
   async (input: Input, options: { [key: string]: string }) => {
-    console.log(TitleDecor("CSV will be written to current path"));
+    console.log(
+      TitleDecor("CSV will be written to current path @ `groups.csv`")
+    );
 
     const { writeToTemp, paths, parser, clearStorage } = fileHandler(input);
 
