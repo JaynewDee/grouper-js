@@ -10,7 +10,9 @@
     "actions/assign/assign.types.ts",
     "actions/assign/pool.ts",
     "actions/assign/pool.ts",
-    "actions/assign/worker.ts"
+    "actions/assign/worker.ts",
+    "models.ts",
+    "models.ts"
   ],
   "exclude": ["node_modules", "test/*"],
   "compilerOptions": {
