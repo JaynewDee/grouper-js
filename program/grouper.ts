@@ -11,7 +11,7 @@ const PROGRAM_NAME = "GROUPER";
 
 const program = new Command()
   .name(PROGRAM_NAME.toLowerCase())
-  .version("1.0.0")
+  .version("1.2.1")
   .description(TitleDecor(PROGRAM_NAME));
 
 program
