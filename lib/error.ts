@@ -1,4 +1,5 @@
 import { ErrorDecor } from "./decor.js";
+
 const { log } = console;
 
 export const FileNotFound = (): void =>

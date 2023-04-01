@@ -232,7 +232,8 @@ export const assignGroups =
         collectionType: "groups"
       });
     } catch (_) {
-      process.exit(1);
+      return process.exit(1);
     }
+
     clearStorage(groupsWritePath);
   };
