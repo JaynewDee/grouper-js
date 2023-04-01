@@ -138,8 +138,6 @@ export function findTargetGroup(
   targets.push(group);
   delete avgs[group];
 
-  // Could be optimized from O(n) to O(1) with appropriately formatted lookup table
-
   return findTargetGroup(avgs, numOutliers, targets);
 }
 
@@ -204,7 +202,7 @@ export const assignGroups =
 
     if (gs < 2) {
       console.log(
-        TitleDecor("There's no I in team!\nGroup size must be at least 2.")
+        TitleDecor("There's no I in grouper!\nGroup size must be at least 2.")
       );
       return process.exit(1);
     }

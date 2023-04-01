@@ -1,6 +1,6 @@
 {
   "name": "grouperjs",
-  "version": "1.2.15",
+  "version": "1.2.16",
   "description": "",
   "main": "main.js",
   "type": "module",
@@ -12,7 +12,8 @@
   "keywords": [
     "cli",
     "commander",
-    "typescript"
+    "typescript",
+    "utilities"
   ],
   "author": "",
   "license": "ISC",
