@@ -10,3 +10,13 @@ export const FileNotFound = (): void =>
       `
     )
   );
+
+export const ParseError = (): void =>
+  log(
+    ErrorDecor(
+      `
+      Something went wrong while parsing your file.
+      Please verify that the file is an appropriately-formatted BCS gradebook export.
+      `
+    )
+  );

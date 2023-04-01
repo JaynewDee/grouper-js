@@ -209,26 +209,30 @@ export const assignGroups =
 
     const { writeToTemp, paths, parser, clearStorage } = fileHandler(input);
     const { localAbsolute, studentsWritePath, groupsWritePath } = paths;
-    const parsed: any = await parser("bcsGroups", [])(localAbsolute);
 
-    if (gs > floor(parsed.length / 2)) {
-      console.log(TitleDecor("Group Size too large to form proper groups."));
-      return process.exit(1);
+    try {
+      const parsed: any = await parser("bcsGroups", [])(localAbsolute);
+
+      if (gs > floor(parsed.length / 2)) {
+        console.log(TitleDecor("Group Size too large to form proper groups."));
+        return process.exit(1);
+      }
+
+      console.log(
+        TitleDecor("CSV will be written to current path @ `groups.csv`")
+      );
+
+      await writeToTemp(studentsWritePath, parsed);
+      const groups = processRecords(utils.cleanRecords(parsed), "avg", gs);
+      await writeToTemp(groupsWritePath, groups);
+
+      await useDelivery(groups);
+      await exportHandler(fileHandler)({
+        fileType: ".csv",
+        collectionType: "groups"
+      });
+    } catch (_) {
+      process.exit(1);
     }
-
-    console.log(
-      TitleDecor("CSV will be written to current path @ `groups.csv`")
-    );
-
-    await writeToTemp(studentsWritePath, parsed);
-    const groups = processRecords(utils.cleanRecords(parsed), "avg", gs);
-    await writeToTemp(groupsWritePath, groups);
-
-    await useDelivery(groups);
-    await exportHandler(fileHandler)({
-      fileType: ".csv",
-      collectionType: "groups"
-    });
-
     clearStorage(groupsWritePath);
   };

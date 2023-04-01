@@ -1,6 +1,6 @@
 import csv from "csvtojson";
 import { parse } from "json2csv";
-import { FileNotFound } from "./error.js";
+import { FileNotFound, ParseError } from "./error.js";
 import { Student } from "./models.js";
 import { StudentType } from "./models.js";
 
@@ -25,7 +25,14 @@ const getFields = (studentsArr: StudentType[]) =>
     )
   );
 
-const readCsv = async (path: string) => await csv().fromFile(path);
+const readCsv = async (path: string) => {
+  try {
+    return await csv().fromFile(path);
+  } catch (err) {
+    ParseError();
+    return [];
+  }
+};
 
 const convertFormattedCsvToJson = async (path: string) =>
   readCsv(path)
@@ -38,20 +45,37 @@ const convertFormattedJsonToCsv = (jsonData: any): ParserReturn =>
 const convertGroupsJsonToCsv = (jsonData: any): ParserReturn =>
   parse(jsonData, { fields: ["name", "avg", "group"] });
 
-const bcsToUsable = async (path: string) =>
-  await readCsv(path).then((messy) => {
-    if (!messy.length) {
-      throw FileNotFound();
-    }
+const bcsToUsable = async (path: string) => {
+  try {
+    return await readCsv(path).then((messy) => {
+      if (!messy.length) {
+        return FileNotFound();
+      }
 
-    return messy
-      .map((val) =>
-        Student(val["Student"], parseFloat(val["Current Score"]), "0")
-      )
-      .filter(
-        (obj) => obj.name !== "Points Possible" && obj.name !== "Student, Test"
-      );
-  });
+      const clean = messy
+        .map((val) =>
+          Student(val["Student"], parseFloat(val["Current Score"]), "0")
+        )
+        .filter(
+          (obj) =>
+            obj.name !== "Points Possible" && obj.name !== "Student, Test"
+        );
+
+      for (const item of clean) {
+        const noName = item.name === undefined;
+        const noAvg = isNaN(item.avg);
+
+        if (noName || noAvg) {
+          return ParseError();
+        }
+      }
+
+      return clean;
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 export type ParserData = StudentType[] | [];
 
