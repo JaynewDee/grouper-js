@@ -59,6 +59,7 @@ export function processRecords(
     final = assignOutliers(groups, outliers, targetGroups);
     avgs = calcGroupAvgs(final);
     SD = utils.standardDeviation(Object.values(avgs));
+
     if (iterations === 50000) {
       iterations = 0;
       targetSD++;
@@ -122,16 +123,22 @@ export function findTargetGroup(
   targets: string[]
 ): string[] {
   if (targets.length === numOutliers) return targets;
-  const high = Object.values(avgs).reduce((a, b) => (a > b ? a : b));
 
-  // Could be optimized from O(n) to O(1) with appropriately formatted lookup table
-  for (const group in avgs) {
-    if (avgs[group] === high) {
-      targets.push(group);
-      delete avgs[group];
-      break;
+  let high = 0;
+  let group = "";
+  let iterable = Object.keys(avgs);
+
+  for (let i = 0; i < iterable.length; i++) {
+    if (avgs[iterable[i]] > high) {
+      high = avgs[iterable[i]];
+      group = iterable[i];
     }
   }
+
+  targets.push(group);
+  delete avgs[group];
+
+  // Could be optimized from O(n) to O(1) with appropriately formatted lookup table
 
   return findTargetGroup(avgs, numOutliers, targets);
 }
@@ -143,6 +150,7 @@ export const popOutliers = (sorted: StudentType[], remainder: number) => {
     outliers.push(sorted.pop());
     i++;
   }
+
   return outliers;
 };
 
